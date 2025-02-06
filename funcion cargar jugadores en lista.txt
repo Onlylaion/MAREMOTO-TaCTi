@@ -1,0 +1,54 @@
+int cargar_jugadores(tlista* lista_jugadores, const int* rondas)
+{
+    int end = 0;
+    char name[MAX_LINE_NOMBRES], end_line[] = "END";
+    tjugador nuejugador;
+
+    iniciar_vector(nuejugador.tiempoaciertos, rondas);
+    nuejugador.puntaje = 0;
+
+    printf("INGRESO DE JUGADORES\n");
+
+    do
+    {
+        printf("\nIngrese el nombre del jugador (END para finalizar): ");
+        scanf("%[^\n]s", name);
+        fflush(stdin);
+
+        if(strcmp(name, end_line))
+        {
+            nuejugador.nombre = malloc(strlen(name) + 1);
+            if(!(nuejugador.nombre))
+                return NO_MEMORY;
+
+            strcpy((nuejugador.nombre), name);
+
+            while((end == 0) && (lista_insertaralfinal_nodup(lista_jugadores, &nuejugador, sizeof(tjugador), cmpnombres, hacernada) == 0))
+            {
+                printf("(nombre duplicado)Ingrese un nombre valido: ");
+                scanf("%[^\n]s", name);
+                fflush(stdin);
+
+                free(nuejugador.nombre);
+
+                if(strcmp(name, end_line))
+                {
+                    nuejugador.nombre = malloc(strlen(name) + 1);
+                    if(!(nuejugador.nombre))
+                        return NO_MEMORY;
+
+                    strcpy((nuejugador.nombre), name);
+                }
+                else
+                    end = 1;
+            }
+        }
+        else
+            end = 1;
+
+    }while(end == 0);
+
+    system("cls");
+
+    return OK;
+}
