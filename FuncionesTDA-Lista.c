@@ -11,47 +11,47 @@ void listaCrear(tLista * l)
 
 void listaInsertarAlInicio(tLista *l,void* elem, unsigned tamElem)
 {
-    tNodo* newNodo;
+    tNodo* nuevo;
 
-    newNodo= malloc(sizeof(tNodo));
-    if(!newNodo)
+    nuevo= malloc(sizeof(tNodo));
+    if(!nuevo)
         return;
-    newNodo->info = malloc(tamElem);
-    if(!newNodo->info)
+    nuevo->info = malloc(tamElem);
+    if(!nuevo->info)
     {
-        free(newNodo);
+        free(nuevo);
         return;
     }
-    newNodo->tamInfo=tamElem;
-    memcpy(newNodo->info,elem,tamElem);
+    nuevo->tamInfo=tamElem;
+    memcpy(nuevo->info,elem,tamElem);
 
-    newNodo->sig=*l;
-    *l=newNodo;
+    nuevo->sig=*l;
+    *l=nuevo;
 }
 
 void listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamElem)
 {
 
-    tNodo* newNodo;
+    tNodo* nuevo;
     int n, i=0;
 
-    newNodo= malloc(sizeof(tNodo));
-    if(!newNodo)
+    nuevo= malloc(sizeof(tNodo));
+    if(!nuevo)
         return;
 
-    newNodo->info = malloc(tamElem);
-    if(!newNodo->info)
+    nuevo->info = malloc(tamElem);
+    if(!nuevo->info)
     {
-        free(newNodo);
+        free(nuevo);
         return;
     }
-    newNodo->tamInfo=tamElem;
-    memcpy(newNodo->info,elem,tamElem);
+    nuevo->tamInfo=tamElem;
+    memcpy(nuevo->info,elem,tamElem);
 
     if(!*l)
     {
-        newNodo->sig=*l;
-        *l=newNodo;
+        nuevo->sig=*l;
+        *l=nuevo;
         return;
     }
 
@@ -63,31 +63,31 @@ void listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tam
         l = &(*l)->sig;
         i++;
     }
-    newNodo->sig= *l;
-    *l = newNodo;
+    nuevo->sig= *l;
+    *l = nuevo;
 }
 int listaInsertarAlFinal(tLista* l,void* elem,unsigned tamElem)
 {
-    tNodo* aux= malloc(sizeof(tNodo));
+    tNodo* nuevo= malloc(sizeof(tNodo));
 
-    if(!aux)
+    if(!nuevo)
         return ERROR;
 
-    aux->info= malloc(tamElem);
+    nuevo->info= malloc(tamElem);
 
-    if(!aux->info)
+    if(!nuevo->info)
     {
-        free(aux);
+        free(nuevo);
         return ERROR;
     }
 
-    memcpy(aux->info, elem, tamElem);
-    aux->tamInfo = tamElem;
+    memcpy(nuevo->info, elem, tamElem);
+    nuevo->tamInfo = tamElem;
 
     if(!*l)
     {
-        aux->sig=*l;
-        *l=aux;
+        nuevo->sig=*l;
+        *l=nuevo;
         return TODO_OK;
     }
 
@@ -95,8 +95,8 @@ int listaInsertarAlFinal(tLista* l,void* elem,unsigned tamElem)
     {
         l =&(*l)->sig;
     }
-    aux->sig = (*l)->sig;
-    (*l)->sig = aux;
+    nuevo->sig = (*l)->sig;
+    (*l)->sig = nuevo;
 
     return TODO_OK;
 }
@@ -116,15 +116,15 @@ int ordenarLista(tLista* p,int (*cmp)(const void*,const void*))
 
             tLista *q = pri;
 
-            tNodo *aux = (*p)->sig;
+            tNodo *auxNodo = (*p)->sig;
 
-            (*p)->sig = aux->sig;
+            (*p)->sig = auxNodo->sig;
 
-            while (cmp((*q)->info, aux->info) < 0)
+            while (cmp((*q)->info, auxNodo->info) < 0)
                 q = &(*q)->sig;
 
-            aux->sig = *q;
-            *q = aux;
+            auxNodo->sig = *q;
+            *q = auxNodo;
         }
         else
             p = &(*p)->sig;

@@ -116,8 +116,6 @@ char obtenerOpcionDeMenu()
             x = ir.Event.MouseEvent.dwMousePosition.X;
             y = ir.Event.MouseEvent.dwMousePosition.Y;
 
-            printf("\n%d - %d\n", x, y);
-
             if(x>=2&& x<=9 && y == 0)
             {
                 return 'A';
@@ -136,6 +134,7 @@ char obtenerOpcionDeMenu()
     }
 
 }
+
 void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configuracion, char tablero[TAM][TAM])
 {
 
@@ -425,30 +424,22 @@ void registrarEnInformeMayoresPuntajes(FILE* arch,tLista* listaJugadores,int (*c
         listaJugadores=&(*listaJugadores)->sig;
     }
 }
+
 int registrarEnInformeJugadorPartidasPuntaje(FILE* arch,tLista* partidasJugadas,int numeroDePartida)
 {
     int j;
     tPartida* auxPartida = (tPartida*) (*partidasJugadas)->info;
 
     if(numeroDePartida==1)
-    {
-        fprintf(arch,"Jugador: %s\nPartida numero %d: \n", auxPartida ->jugador,numeroDePartida);
+        fprintf(arch,"Jugador: %s\n\n", auxPartida ->jugador);
 
-        for(j=0; j<TAM; j++)
-        {
-            fprintf(arch,"\t%c | %c | %c\n",auxPartida ->tablero[j][0],auxPartida ->tablero[j][1],auxPartida ->tablero[j][2]);
-        }
-        fprintf(arch,"Puntos Obtenidos: %d \n\n",auxPartida ->puntajeObtenido);
-    }
-    else
+    fprintf(arch,"Partida numero %d: \n\n",numeroDePartida);
+    for(j=0; j<TAM; j++)
     {
-        fprintf(arch,"Partida numero %d: \n",numeroDePartida);
-        for(j=0; j<TAM; j++)
-        {
-            fprintf(arch,"\t%c | %c | %c\n",auxPartida ->tablero[j][0],auxPartida ->tablero[j][1],auxPartida ->tablero[j][2]);
-        }
-        fprintf(arch,"Puntos Obtenidos: %d \n\n",auxPartida ->puntajeObtenido);
+        fprintf(arch,"\t%c | %c | %c\n",auxPartida ->tablero[j][0],auxPartida ->tablero[j][1],auxPartida ->tablero[j][2]);
     }
+    fprintf(arch,"\nPuntos Obtenidos: %d \n\n",auxPartida ->puntajeObtenido);
+
     fflush(arch);
     return auxPartida->puntajeObtenido;
 }
@@ -468,9 +459,7 @@ int generarInformeDeGrupo(tLista* listaJugadores, tLista* partidasJugadas,int ca
 
     //Personalizo el nombre del informe de juego de acuerdo a fecha y hora:
 
-
     snprintf(nombreArch, sizeof(nombreArch), "informe-juego_%d-%02d-%02d-%02d-%02d.txt",tiempoAct.tm_year + 1900, tiempoAct.tm_mon + 1, tiempoAct.tm_mday, tiempoAct.tm_hour, tiempoAct.tm_min);
-
 
     arch = fopen(nombreArch, "wt");
     if (!arch)
