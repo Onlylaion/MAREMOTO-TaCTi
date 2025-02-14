@@ -6,15 +6,16 @@
 #include "Juego.h"
 #include "TDALista.h"
 
-
 int compararNombre(void*a, void* b)
 {
     return strcmpi((char*)a,(char*)b)==0 ? 1 : 0;
 }
+
 int compararPuntajeTotal(const void* a, const void* b)
 {
     return ((tJugador*)a)->puntaje < ((tJugador*)b)->puntaje ? 1 : -1;
 }
+
 int compararPuntajeTotalIgual(const void* a, const void* b)
 {
     return ((tJugador*)a)->puntaje == ((tJugador*)b)->puntaje ? 1 : 0;
@@ -62,7 +63,6 @@ int registrarMovEnTablero(char tablaTaTeTi[][3], char letra, int x, int y)
 
 void detectarMovDelJugador(char tablero[][3], char letra)
 {
-
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     DWORD eventos;
     INPUT_RECORD ir;
@@ -74,7 +74,7 @@ void detectarMovDelJugador(char tablero[][3], char letra)
     while (1)
     {
         ReadConsoleInput(hIn, &ir, 1, &eventos);
-        // Si se detecta un evento de mouse y se presiona el bot�n izquierdo
+        // Si se detecta un evento de mouse y se presiona el botón izquierdo
         if (ir.EventType == MOUSE_EVENT && ir.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
         {
             x = ir.Event.MouseEvent.dwMousePosition.X;
@@ -110,7 +110,7 @@ char obtenerOpcionDeMenu()
     while (1)
     {
         ReadConsoleInput(hIn, &ir, 1, &eventos);
-        // Si se detecta un evento de mouse y se presiona el bot�n izquierdo
+        // Si se detecta un evento de mouse y se presiona el botón izquierdo
         if (ir.EventType == MOUSE_EVENT && ir.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
         {
             x = ir.Event.MouseEvent.dwMousePosition.X;
@@ -135,10 +135,11 @@ char obtenerOpcionDeMenu()
 
 }
 
+// en el menú ahora están las funciones 'ordenar lista' y 'generar informe'
 void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configuracion, char tablero[TAM][TAM])
 {
-
     char opcion;
+    int dif;
 
     do
     {
@@ -161,12 +162,14 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
                 case 'A':
                 {
                     ingresarJugadores(listaJugadores);
+                    cargarDificultad(&dif);
                     if(*listaJugadores)
                     {
                         mostrarEnOrdenJugadores(listaJugadores);
-                        Jugar(tablero,listaJugadores,listaPartidas,configuracion,compararNombre);
+                        Jugar(tablero,listaJugadores,dif,listaPartidas,configuracion,compararNombre);
                         ordenarLista(listaJugadores,compararPuntajeTotal);
-                        generarInformeDeGrupo(listaJugadores,ListaPartidas,configuracion->CantPartidas,compararPuntajeTotalIgual);
+                        generarInformeDeGrupo(listaJugadores,listaPartidas,configuracion->CantPartidas,compararPuntajeTotalIgual);
+
                     }
                     else
                     {
@@ -189,7 +192,7 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
         }
 
     }
-    while(opcion=='A'||opcion=='B'||opcion=='C');
+    while(opcion!='A'&&opcion!='B'&&opcion!='C');
 
     return;
 }
@@ -197,6 +200,8 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
 void mostrarEnOrdenJugadores(tLista* jugadores)
 {
     int i=1;
+
+    system("cls");
 
     printf("Orden de Juego:\n");
     while(*jugadores)
@@ -269,15 +274,30 @@ char verificarGanador(char tablero[TAM][TAM])
     return ' ';
 }
 
-void movimientoIA(char tablero[TAM][TAM], char letra)
+// IA con dos niveles de dificultad
+void movimientoIA(char tablero[TAM][TAM], char letraIA, int dificultad)
 {
-
     int fila, columna;
+    char letraJug;
 
-    if (puedeGanar(tablero, 'O', &fila, &columna) || puedeGanar(tablero, 'X', &fila, &columna))
-    {
-        tablero[fila][columna] = letra;
-        return;
+    (letraIA == 'X') ? (letraJug = 'O') : (letraJug = 'X');
+
+    if(dificultad == 1){
+
+        // si la IA puede ganar, lo hace. si no puede ganar, entonces bloquea al jugador.
+        if (puedeGanar(tablero, letraIA, &fila, &columna) || puedeGanar(tablero, letraJug, &fila, &columna)){
+            tablero[fila][columna] = letraIA;
+            return;
+        }
+
+    } else {
+
+        // la IA solo verifica si puede ganar.
+        if (puedeGanar(tablero, letraIA, &fila, &columna)){
+            tablero[fila][columna] = letraIA;
+            return;
+        }
+
     }
 
     do
@@ -287,7 +307,7 @@ void movimientoIA(char tablero[TAM][TAM], char letra)
     }
     while (tablero[fila][columna] != ' ');
 
-    tablero[fila][columna] = letra;
+    tablero[fila][columna] = letraIA;
 
     return;
 }
@@ -322,19 +342,33 @@ int puedeGanar(char tablero[TAM][TAM], char jugador, int* fila, int* columna)
     return 0;
 }
 
-char quienEmpieza()
+// Se asignan los simbolos aleatoriamente al jugador y a la IA
+void asignarSimbolos(char* jugador, char* ia)
 {
-    if(rand()%2 == 1)
-        return 'X';
-    else
-        return 'O';
+    if (rand() % 2 == 0) {
+        *jugador = 'X';
+        *ia = 'O';
+    } else {
+        *jugador = 'O';
+        *ia = 'X';
+    }
+
+    return;
 }
 
-void actualizarPantalla(char tablero[TAM][TAM], char jugador, char ia)
+// Actualizar se usa mientras se está jugando y al final para mostrar quién ganó (por eso el parámetro turno es opcional, en el final no se usa)
+void actualizarPantalla(char tablero[TAM][TAM], char jugador, char ia, char turno)
 {
-
     system("cls");
     printf("Jugador: %c | IA: %c\n", jugador, ia);
+
+    if(turno!='\0' && turno==jugador)
+        printf("\n\nTurno de JUGADOR (%c):", jugador);
+    else if(turno!='\0')
+        printf("\n\nTurno de IA (%c):", ia);
+    else
+        printf("\n\nFIN DEL JUEGO!");
+
     mostrarTablero(tablero);
 
     return;
@@ -378,11 +412,11 @@ void registrarPartida(tLista* partidas, void* jugador, char tablero[][TAM],int p
 
 }
 
-void quienGana(tNodo* listaJugadores,tLista* partidas,char tablero[][TAM],char ganador,char turnoJugador, void(*accion)(tLista*, void*, char[][TAM],int))
+void quienGana(tNodo* listaJugadores,tLista* partidas,char tablero[][TAM],char ganador,char jug, void(*accion)(tLista*, void*, char[][TAM],int))
 {
     tJugador* jugador = (tJugador*)listaJugadores->info;
 
-    if (ganador == turnoJugador )
+    if (ganador == jug)
     {
         printf("\nEl jugador %s gana!!\n", jugador->nombre);
         jugador->puntaje +=3;
@@ -445,6 +479,7 @@ int registrarEnInformeJugadorPartidasPuntaje(FILE* arch,tLista* partidasJugadas,
     fflush(arch);
     return auxPartida->puntajeObtenido;
 }
+
 void registrarEnInformePuntosTotalesXJugador(FILE* arch,int PuntosTotales)
 {
     fprintf(arch,"TOTAL DE PUNTOS: %d \n----------------------------------\n\n", PuntosTotales);
@@ -490,13 +525,33 @@ int generarInformeDeGrupo(tLista* listaJugadores, tLista* partidasJugadas,int ca
     return TODO_OK;
 }
 
-int Jugar(char tablero[][3],tLista* listaJugadores,tLista* ListaPartidas,tConfiguracion* configuracion,int (cmp)(void*, void*))
+//
+void cargarDificultad(int* num){
+
+    printf("Ingrese dificultad ('0' facil - '1' dificil) = ");
+    scanf("%d", num);
+
+    while(*num!=0 && *num!=1){
+        printf("Incorrecto. Ingrese '0' o '1': ");
+        scanf("%d", num);
+    }
+
+    return;
+}
+
+// Modifiqué jugar para que haga lo mismo con dos ifs menos que eran muy parecidos. Agregué los char jugador y ia para no usar 'x' o 'y' directamente. Aparte, estos char son necesarios
+// para que ande bien la funcion de la IA.
+int Jugar(char tablero[][3], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion, int (cmp)(void*, void*))
 {
     char ganador = ' ';
+    char turno;
+    char jugador, ia;
     int movimientos = 0, cantPartidasJugadas = 0;
-    char turnoJugador;
     tNodo* jugadores = *listaJugadores;
 
+    asignarSimbolos(&jugador, &ia);
+
+    turno = 'X';
 
     while(jugadores)
     {
@@ -504,59 +559,46 @@ int Jugar(char tablero[][3],tLista* listaJugadores,tLista* ListaPartidas,tConfig
 
         while(cantPartidasJugadas<configuracion->CantPartidas)
         {
-            turnoJugador=quienEmpieza();
 
-            while(ganador == ' ' && movimientos < TAM * TAM)
+            while(ganador == ' ' && movimientos < TAM*TAM)
             {
 
-                if(turnoJugador == 'X')
+                if(turno == jugador)
                 {
-                    actualizarPantalla(tablero,'X','O');
-                    detectarMovDelJugador(tablero,'X');
+                    actualizarPantalla(tablero,jugador,ia,turno);
+                    detectarMovDelJugador(tablero,jugador);
                     movimientos++;
                     ganador = verificarGanador(tablero);
-
-                    if(ganador==' ' && movimientos<TAM*TAM)
-                    {
-                        movimientoIA(tablero,'O');
-                        movimientos++;
-                        ganador = verificarGanador(tablero);
-                    }
+                    turno = ia;
                 }
                 else
                 {
-                    movimientoIA(tablero,'X');
+                    actualizarPantalla(tablero,jugador,ia,turno);
+                    movimientoIA(tablero,ia,dif);
                     movimientos++;
                     ganador = verificarGanador(tablero);
-                    actualizarPantalla(tablero,'O','X');
-
-                    if(ganador==' '&& movimientos<TAM*TAM)
-                    {
-                        detectarMovDelJugador(tablero,'O');
-                        movimientos++;
-                        ganador = verificarGanador(tablero);
-                    }
+                    turno = jugador;
                 }
+
             }
 
-            actualizarPantalla(tablero,turnoJugador=='X'?'X':'O',turnoJugador=='O'?'X':'O');
-            quienGana(jugadores,ListaPartidas,tablero,ganador,turnoJugador,registrarPartida);
-
+            actualizarPantalla(tablero,jugador,ia,'\0');
+            quienGana(jugadores,ListaPartidas,tablero,ganador,jugador,registrarPartida);
 
             printf("\nPresione enter para comenzar el siguiente juego...");
             fflush(stdin);
             getchar();
 
-
             ganador=' ';
             movimientos=0;
             cantPartidasJugadas++;
             inicializarTablero(tablero);
+
         }
+
         jugadores=jugadores->sig;
         cantPartidasJugadas=0;
     }
 
     return 0;
 }
-
