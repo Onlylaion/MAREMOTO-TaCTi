@@ -41,9 +41,9 @@ int compararPuntajeTotalIgual(const void* a, const void* b);
 void inicializarTablero(char tablero[TAM][TAM]);
 void mostrarTablero(char tablero[TAM][TAM]);
 char verificarGanador(char tablero[TAM][TAM]);
-void movimientoIA(char tablero[TAM][TAM], char letra);
+void movimientoIA(char tablero[TAM][TAM], char, int);
 int puedeGanar(char tablero[TAM][TAM], char jugador, int *fila, int *columna);
-void actualizarPantalla(char tablero[TAM][TAM], char jugador, char ia);
+void actualizarPantalla(char tablero[TAM][TAM], char turno, char jugador, char ia);
 char quienEmpieza();
 char obtenerOpcionDeMenu();
 void detectarMovDelJugador(char tablero[TAM][TAM], char letra);
@@ -54,6 +54,8 @@ int preparadoSiONo(void* jugador );
 
 void registrarPartida(tLista* partidas, void* jugador, char tablero[][TAM],int puntajeObtenido);
 
+void cargarDificultad(int* num);
+
 ///FUNCIONES PARA GENERAR EL INFORME:
 int generarInformeDeGrupo(tLista* listaJugadores, tLista* partidasJugadas,int cantidadPartidas,int (*cmp)(const void*, const void*));
 void registrarEnInformeMayoresPuntajes(FILE* arch,tLista* listaJugadores,int (*cmp)(const void*, const void*));
@@ -63,7 +65,7 @@ void registrarEnInformePuntosTotalesXJugador(FILE* arch,int PuntosTotales);
 
 ///ESTO ES DE PRUEBA:
 void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configuracion, char tablero[TAM][TAM]);
-int Jugar(char tablero[][TAM],tLista* listaJugadores,tLista* listaPartidas, tConfiguracion* configuracion,int (cmp)(void*, void*));
+int Jugar(char tablero[][3], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion, int (cmp)(void*, void*));
 void ingresarJugadores(tLista* pl);
 int obtenerDatosArchConfiguracion(char* ruta, tConfiguracion* configuracion);
 #endif // JUEGO_H_INCLUDED
