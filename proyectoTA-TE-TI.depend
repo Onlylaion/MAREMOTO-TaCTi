@@ -125,7 +125,7 @@
 	<curl/curl.h>
 	<string.h>
 
-1739498074 source:c:\users\pc\desktop\maremoto-tacti\funcionestda-lista.c
+1739499160 source:c:\users\pc\desktop\maremoto-tacti\funcionestda-lista.c
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
@@ -134,7 +134,7 @@
 
 1739498074 c:\users\pc\desktop\maremoto-tacti\tdalista.h
 
-1739498826 source:c:\users\pc\desktop\maremoto-tacti\juego.c
+1739505246 source:c:\users\pc\desktop\maremoto-tacti\juego.c
 	<stdio.h>
 	<stdlib.h>
 	<windows.h>

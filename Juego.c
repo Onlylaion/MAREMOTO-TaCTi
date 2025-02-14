@@ -165,6 +165,8 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
                     {
                         mostrarEnOrdenJugadores(listaJugadores);
                         Jugar(tablero,listaJugadores,listaPartidas,configuracion,compararNombre);
+                        ordenarLista(listaJugadores,compararPuntajeTotal);
+                        generarInformeDeGrupo(listaJugadores,ListaPartidas,configuracion->CantPartidas,compararPuntajeTotalIgual);
                     }
                     else
                     {
@@ -187,7 +189,7 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
         }
 
     }
-    while(opcion!='A'&&opcion!='B'&&opcion!='C');
+    while(opcion=='A'||opcion=='B'||opcion=='C');
 
     return;
 }
@@ -498,7 +500,6 @@ int Jugar(char tablero[][3],tLista* listaJugadores,tLista* ListaPartidas,tConfig
 
     while(jugadores)
     {
-
         preparadoSiONo(jugadores->info);
 
         while(cantPartidasJugadas<configuracion->CantPartidas)
@@ -555,8 +556,6 @@ int Jugar(char tablero[][3],tLista* listaJugadores,tLista* ListaPartidas,tConfig
         jugadores=jugadores->sig;
         cantPartidasJugadas=0;
     }
-    ordenarLista(listaJugadores,compararPuntajeTotal);
-    generarInformeDeGrupo(listaJugadores,ListaPartidas,configuracion->CantPartidas,compararPuntajeTotalIgual);
 
     return 0;
 }
