@@ -1,0 +1,119 @@
+# depslib dependency file v1.0
+1738874900 source:c:\users\pc\documents\estudio\materias\algoritmos y estructura de datos\proyectota-te-ti\main.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	<time.h>
+	"Juego.h"
+
+1738874411 source:c:\users\pc\documents\estudio\materias\algoritmos y estructura de datos\proyectota-te-ti\funcionestda-lista.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	"TDALista.h"
+
+1738874411 c:\users\pc\documents\estudio\materias\algoritmos y estructura de datos\proyectota-te-ti\tdalista.h
+
+1738874752 source:c:\users\pc\documents\estudio\materias\algoritmos y estructura de datos\proyectota-te-ti\juego.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	"Juego.h"
+
+1738874949 c:\users\pc\documents\estudio\materias\algoritmos y estructura de datos\proyectota-te-ti\juego.h
+
+1739395600 source:c:\users\pc\desktop\proyectota-te-ti\funcionestda-lista.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	"TDALista.h"
+
+1739240736 c:\users\pc\desktop\proyectota-te-ti\tdalista.h
+
+1739484271 source:c:\users\pc\desktop\proyectota-te-ti\juego.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	<time.h>
+	<string.h>
+	"Juego.h"
+	"TDALista.h"
+
+1739484271 c:\users\pc\desktop\proyectota-te-ti\juego.h
+	"TDALista.h"
+	<stdio.h>
+
+1739244004 source:c:\users\pc\desktop\proyectota-te-ti\main.c
+	"Juego.h"
+	"TDALista.h"
+	"conectarApi.h"
+
+1739155297 source:c:\users\pc\desktop\proyectota-te-ti\conectarapi.c
+
+1739155297 c:\users\pc\desktop\proyectota-te-ti\conectarapi.h
+
+1739155298 source:e:\tp algoritmos 2\proyectota-te-ti\proyectota-te-ti\conectarapi.c
+
+1739487067 source:e:\tp algoritmos 2\proyectota-te-ti\proyectota-te-ti\main.c
+	"Juego.h"
+	"TDALista.h"
+	"conectarApi.h"
+
+1739484272 e:\tp algoritmos 2\proyectota-te-ti\proyectota-te-ti\juego.h
+	"TDALista.h"
+	<stdio.h>
+
+1739240738 e:\tp algoritmos 2\proyectota-te-ti\proyectota-te-ti\tdalista.h
+
+1739488527 e:\tp algoritmos 2\proyectota-te-ti\proyectota-te-ti\conectarapi.h
+
+1739486561 source:e:\tp algoritmos 2\proyectota-te-ti\proyectota-te-ti\funcionestda-lista.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	"TDALista.h"
+
+1739487138 source:e:\tp algoritmos 2\proyectota-te-ti\proyectota-te-ti\juego.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	<time.h>
+	<string.h>
+	"Juego.h"
+	"TDALista.h"
+
+1739486561 source:e:\tp algoritmos\maremoto-tacti\funcionestda-lista.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	"TDALista.h"
+
+1739240738 e:\tp algoritmos\maremoto-tacti\tdalista.h
+
+1739487138 source:e:\tp algoritmos\maremoto-tacti\juego.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	<time.h>
+	<string.h>
+	"Juego.h"
+	"TDALista.h"
+
+1739484272 e:\tp algoritmos\maremoto-tacti\juego.h
+	"TDALista.h"
+	<stdio.h>
+
+1739487067 source:e:\tp algoritmos\maremoto-tacti\main.c
+	"Juego.h"
+	"TDALista.h"
+	"conectarApi.h"
+
+1739491793 e:\tp algoritmos\maremoto-tacti\conectarapi.h
+	<stdio.h>
+	<curl/curl.h>
+	<string.h>
+
