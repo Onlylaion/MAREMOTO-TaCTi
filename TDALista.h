@@ -20,7 +20,8 @@ void listaCrear(tLista * l);
 void listaInsertarAlInicio(tLista *l,void* elem, unsigned tamElem);
 void listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamElem);
 int listaInsertarAlFinal(tLista* l,void* elem,unsigned tamElem);
-int ordenarLista(tLista* pl,int (*cmp)(const void*, const void* ));
-void vaciarLista(tLista *lista);
+int ordenarLista(tLista* l,int (*cmp)(const void*, const void* ));
+void vaciarLista(tLista *l);
+void listaFuncionMap(tLista* l, int (*accion)(void*,void*));
 
 #endif // TDALISTA_H_INCLUDED

@@ -102,23 +102,23 @@ int listaInsertarAlFinal(tLista* l,void* elem,unsigned tamElem)
 }
 
 
-int ordenarLista(tLista* p,int (*cmp)(const void*,const void*))
+int ordenarLista(tLista* l,int (*cmp)(const void*,const void*))
 {
 
-    tLista *pri = p;
-    if (*p == NULL)
+    tLista *pri = l;
+    if (*l == NULL)
         return 0;
-    while ((*p)->sig)
+    while ((*l)->sig)
     {
 
-        if (cmp((*p)->info, (*p)->sig->info) > 0)
+        if (cmp((*l)->info, (*l)->sig->info) > 0)
         {
 
             tLista *q = pri;
 
-            tNodo *auxNodo = (*p)->sig;
+            tNodo *auxNodo = (*l)->sig;
 
-            (*p)->sig = auxNodo->sig;
+            (*l)->sig = auxNodo->sig;
 
             while (cmp((*q)->info, auxNodo->info) < 0)
                 q = &(*q)->sig;
@@ -127,19 +127,29 @@ int ordenarLista(tLista* p,int (*cmp)(const void*,const void*))
             *q = auxNodo;
         }
         else
-            p = &(*p)->sig;
+            l = &(*l)->sig;
     }
     return 1;
 }
 
-void vaciarLista(tLista *lista)
+void vaciarLista(tLista *l)
 {
     tNodo *elim;
-    while(*lista)
+    while(*l)
     {
-        elim = *lista;
-        *lista = elim->sig;
+        elim = *l;
+        *l = elim->sig;
         free(elim->info);
         free(elim);
+    }
+}
+void listaFuncionMap(tLista* l, int (*accion)(void*,void*))
+{
+    int i=0;
+    while(*l)
+    {
+        i++;
+        accion((*l)->info,&i);
+        l=&(*l)->sig;
     }
 }

@@ -6,6 +6,14 @@
 #include "Juego.h"
 #include "TDALista.h"
 
+int mostrarJugador(void* a, void* b)
+{
+    int* posicion= (int*)b;
+    tJugador* jugador=(tJugador*)a;
+    printf("%d-%s\n",*posicion,jugador->nombre);
+    return TODO_OK;
+}
+
 int compararNombre(void*a, void* b)
 {
     return strcmpi((char*)a,(char*)b)==0 ? 1 : 0;
@@ -40,23 +48,23 @@ int obtenerDatosArchConfiguracion(char* ruta, tConfiguracion* configuracion)
 int registrarMovEnTablero(char tablaTaTeTi[][3], char letra, int x, int y)
 {
 
-    if(x>=12 && x<=17 && y>=3 && y<=7)
+    if(x>=11 && x<=17 && y>=6 && y<=9)
         return tablaTaTeTi[0][0]==' ' ? (tablaTaTeTi[0][0]=letra) : 0;
-    else if(x>=19 && x<=25 && y>=3 && y<=7)
+    else if(x>=19 && x<=25 && y>=6 && y<=9)
         return tablaTaTeTi[0][1]==' ' ? (tablaTaTeTi[0][1]=letra) : 0;
-    else if(x>=27 && x<=33 && y>=3 && y<=7)
+    else if(x>=27 && x<=33 && y>=6 && y<=9)
         return tablaTaTeTi[0][2]==' ' ? (tablaTaTeTi[0][2]=letra) : 0;
-    else if(x>=12 && x<=17 && y>=8 && y<=12)
+    else if(x>=11 && x<=17 && y>=10 && y<=14)
         return tablaTaTeTi[1][0]==' ' ? (tablaTaTeTi[1][0]=letra) : 0;
-    else if(x>=19 && x<=25 && y>=8 && y<=12)
+    else if(x>=19 && x<=25 && y>=10 && y<=14)
         return tablaTaTeTi[1][1]==' ' ? (tablaTaTeTi[1][1]=letra) : 0;
-    else if(x>=27 && x<=33 && y>=8 && y<=12)
+    else if(x>=27 && x<=33 && y>=10 && y<=14)
         return tablaTaTeTi[1][2]==' ' ? (tablaTaTeTi[1][2]=letra) : 0;
-    else if(x>=12 && x<=17 && y>=14 && y<=17)
+    else if(x>=11 && x<=17 && y>=15 && y<=19)
         return tablaTaTeTi[2][0]==' ' ? (tablaTaTeTi[2][0]=letra) : 0;
-    else if(x>=19 && x<=25 && y>=14 && y<=17)
+    else if(x>=19 && x<=25 && y>=15 && y<=19)
         return tablaTaTeTi[2][1]==' ' ? (tablaTaTeTi[2][1]=letra) : 0;
-    else if(x>=27 && x<=33 && y>=14 && y<=17)
+    else if(x>=27 && x<=33 && y>=15 && y<=19)
         return tablaTaTeTi[2][2]==' ' ? (tablaTaTeTi[2][2]=letra) : 0;
     return 0;
 }
@@ -79,7 +87,7 @@ void detectarMovDelJugador(char tablero[][3], char letra)
         {
             x = ir.Event.MouseEvent.dwMousePosition.X;
             y = ir.Event.MouseEvent.dwMousePosition.Y;
-
+//            printf("x: %d----y: %d\n",x,y);
             if(registrarMovEnTablero(tablero,letra, x, y))
             {
                 system("cls");
@@ -89,7 +97,7 @@ void detectarMovDelJugador(char tablero[][3], char letra)
             }
             else
             {
-                printf("Error al realizar el movimiento.\n");
+                printf("\nError al realizar el movimiento.\n");
                 Sleep(100);
                 fflush(stdout);
             }
@@ -159,35 +167,35 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
         {
             switch(opcion)
             {
-                case 'A':
+            case 'A':
+            {
+                ingresarJugadores(listaJugadores);
+                cargarDificultad(&dif);
+                if(*listaJugadores)
                 {
-                    ingresarJugadores(listaJugadores);
-                    cargarDificultad(&dif);
-                    if(*listaJugadores)
-                    {
-                        mostrarEnOrdenJugadores(listaJugadores);
-                        Jugar(tablero,listaJugadores,dif,listaPartidas,configuracion,compararNombre);
-                        ordenarLista(listaJugadores,compararPuntajeTotal);
-                        generarInformeDeGrupo(listaJugadores,listaPartidas,configuracion->CantPartidas,compararPuntajeTotalIgual);
-
-                    }
-                    else
-                    {
-                        printf("No se ha ingresado ningun jugador...");
-                        fflush(stdin);
-                        getchar();
-                        system("cls");
-                    }
+                    mostrarEnOrdenJugadores(listaJugadores,mostrarJugador);
+                    Jugar(tablero,listaJugadores,dif,listaPartidas,configuracion,compararNombre);
+                    ordenarLista(listaJugadores,compararPuntajeTotal);
+                    generarInformeDeGrupo(listaJugadores,listaPartidas,configuracion->CantPartidas,compararPuntajeTotalIgual);
 
                 }
-                break;
-                case 'B':
+                else
                 {
-
+                    printf("No se ha ingresado ningun jugador...");
+                    fflush(stdin);
+                    getchar();
+                    system("cls");
                 }
-                break;
-                case 'C':
-                    return;
+
+            }
+            break;
+            case 'B':
+            {
+
+            }
+            break;
+            case 'C':
+                return;
             }
         }
 
@@ -197,19 +205,10 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
     return;
 }
 
-void mostrarEnOrdenJugadores(tLista* jugadores)
+void mostrarEnOrdenJugadores(tLista* jugadores,int (*accion)(void*, void*))
 {
-    int i=1;
-
-    system("cls");
-
     printf("Orden de Juego:\n");
-    while(*jugadores)
-    {
-        printf("%d-%s\n",i,((tJugador*)(*jugadores)->info)->nombre);
-        i++;
-        jugadores=&(*jugadores)->sig;
-    }
+    listaFuncionMap(jugadores,accion);
     printf("\nPresione enter para comenzar el juego...");
     fflush(stdin);
     getchar();
@@ -282,18 +281,23 @@ void movimientoIA(char tablero[TAM][TAM], char letraIA, int dificultad)
 
     (letraIA == 'X') ? (letraJug = 'O') : (letraJug = 'X');
 
-    if(dificultad == 1){
+    if(dificultad == 1)
+    {
 
         // si la IA puede ganar, lo hace. si no puede ganar, entonces bloquea al jugador.
-        if (puedeGanar(tablero, letraIA, &fila, &columna) || puedeGanar(tablero, letraJug, &fila, &columna)){
+        if (puedeGanar(tablero, letraIA, &fila, &columna) || puedeGanar(tablero, letraJug, &fila, &columna))
+        {
             tablero[fila][columna] = letraIA;
             return;
         }
 
-    } else {
+    }
+    else
+    {
 
         // la IA solo verifica si puede ganar.
-        if (puedeGanar(tablero, letraIA, &fila, &columna)){
+        if (puedeGanar(tablero, letraIA, &fila, &columna))
+        {
             tablero[fila][columna] = letraIA;
             return;
         }
@@ -345,14 +349,16 @@ int puedeGanar(char tablero[TAM][TAM], char jugador, int* fila, int* columna)
 // Se asignan los simbolos aleatoriamente al jugador y a la IA
 void asignarSimbolos(char* jugador, char* ia)
 {
-    if (rand() % 2 == 0) {
+    if (rand() % 2 == 0)
+    {
         *jugador = 'X';
         *ia = 'O';
-    } else {
+    }
+    else
+    {
         *jugador = 'O';
         *ia = 'X';
     }
-
     return;
 }
 
@@ -526,12 +532,14 @@ int generarInformeDeGrupo(tLista* listaJugadores, tLista* partidasJugadas,int ca
 }
 
 //
-void cargarDificultad(int* num){
+void cargarDificultad(int* num)
+{
 
     printf("Ingrese dificultad ('0' facil - '1' dificil) = ");
     scanf("%d", num);
 
-    while(*num!=0 && *num!=1){
+    while(*num!=0 && *num!=1)
+    {
         printf("Incorrecto. Ingrese '0' o '1': ");
         scanf("%d", num);
     }

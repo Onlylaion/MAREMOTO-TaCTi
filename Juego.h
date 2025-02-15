@@ -32,7 +32,7 @@ typedef struct
 
 }tConfiguracion;
 
-
+int mostrarJugador(void* a, void* b);
 int compararNombre(void*a, void* b);
 int compararPuntajeTotal(const void* a, const void* b);
 int compararPuntajeTotalIgual(const void* a, const void* b);
@@ -48,7 +48,7 @@ char quienEmpieza();
 char obtenerOpcionDeMenu();
 void detectarMovDelJugador(char tablero[TAM][TAM], char letra);
 int registrarMovEnTablero(char tablaTaTeTi[TAM][TAM], char letra, int x, int y);
-void mostrarEnOrdenJugadores(tLista* jugadores);
+void mostrarEnOrdenJugadores(tLista* jugadores,int (*accion)(void*, void*));
 void quienGana(tNodo* listaJugadores,tLista* partidas,char tablero[][TAM],char ganador,char turnoJugador, void(*accion)(tLista*, void*, char[][TAM],int));
 int preparadoSiONo(void* jugador );
 
