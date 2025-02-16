@@ -4,8 +4,7 @@
 #include <time.h>
 #include <string.h>
 #include "Juego.h"
-#include "TDALista.h"
-#include "conectarApi.h"
+
 
 int cmpNombres(const void* a, const void* b)
 {
@@ -24,10 +23,9 @@ void ingresarJugadores(tLista* pl)
 {
     tJugador jugador;
     int cantidad = 0;
-
     printf("Ingresar Nombres (termina con FIN/fin):\n");
 
-    // Usamos fgets para leer el nombre, permitiendo espacios
+    // Usamos fgets para leer el nombre
     fgets(jugador.nombre, sizeof(jugador.nombre), stdin);
     jugador.nombre[strcspn(jugador.nombre, "\n")] = '\0';  // Eliminar salto de línea
 
@@ -36,27 +34,24 @@ void ingresarJugadores(tLista* pl)
     // Convertir el nombre ingresado a minúsculas
     normalizar_minusculas(jugador.nombre);
 
+    // Mientras el jugador no ingrese "FIN" o "fin"
     while (strcmp(jugador.nombre, "fin") != 0)  // Comparar con "fin" en minúsculas
     {
-        if (!listaInsertarEnPosAleatoria(pl, cantidad, &jugador, sizeof(jugador), cmpNombres)) {
-            printf("Error: Nombre duplicado. Intente nuevamente.\n");
-        } else {
-            cantidad++;
-            jugador.puntaje = 0;
-        }
+        listaInsertarEnPosAleatoria(pl, cantidad, &jugador, sizeof(jugador),cmpNombres);
+        cantidad++;
 
-        // Volver a leer el siguiente nombre con fgets para permitir espacios
-        printf("Ingresar otro nombre (termina con FIN/fin):\n");
+        // Volver a leer el siguiente nombre
         fgets(jugador.nombre, sizeof(jugador.nombre), stdin);
         jugador.nombre[strcspn(jugador.nombre, "\n")] = '\0';  // Eliminar salto de línea
 
         // Convertir el nombre a minúsculas antes de la comparación
         normalizar_minusculas(jugador.nombre);
+
+        jugador.puntaje = 0;
     }
 
     system("cls");
 }
-
 
 void mostrarJugador(const void* a,const void* b)
 {
@@ -248,6 +243,9 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
                     printf("El ranking es: \n");
                     listaFuncionMap(&listaRanking, mostrarJugadorAPI);
                 }
+                printf("\nPresion enter para avanzar al menu...");
+                fflush(stdout);
+                getchar();
                 vaciarLista(&listaRanking);
 
             }
@@ -257,21 +255,22 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
             }
         }
 
+        system("cls");
     }
-    while(opcion=='A'&&opcion=='B'&&opcion=='C');
+    while(opcion=='A'||opcion=='B'||opcion=='C');
 
     return;
 }
 
-int obtenerRanking(tLista *lista, tConfiguracion* configuracion)
-{
-    CURL *curl;
+int obtenerRanking(tLista *lista, tConfiguracion* configuracion){
     CURLcode res;
     tJugadorAPI jugador;
     tRespuesta resAPI  = {NULL, 0};
     char pathGet[TAM_CADENA_ARCH];
-    snprintf(pathGet, "%s/%s", configuracion->urlApi, configuracion->codIdenGrupo);
-    res = peticionGET(curl, &resAPI, pathGet);
+
+    snprintf(pathGet, TAM_CADENA_ARCH, "%s/%s", configuracion->urlApi, configuracion->codIdenGrupo);
+
+    res = peticionGET(&resAPI, pathGet);
     if (res != CURLE_OK){
         printf("Error en la solicitud a la API.\n");
         return ERROR;
@@ -512,8 +511,9 @@ int preparadoSiONo(void* jugador )
     do
     {
         system("cls");
-        printf("Jugador %s, estas preparado?(Si/No)\n Ingresa la opcion: ",a->nombre);
-        scanf("%s",opcion);
+        printf("Jugador %s, estas preparado?\nPresiona enter para continuar... ",a->nombre);
+        fflush(stdin);
+        getchar();
     }
     while( strcmpi(opcion,"SI")!=0);
     return TODO_OK;
@@ -622,7 +622,6 @@ int Jugar(char tablero[][3], tLista* listaJugadores, int dif, tLista* ListaParti
 
     asignarSimbolos(&jugador, &ia);
 
-    turno = 'X';
 
     while(jugadores)
     {
@@ -630,6 +629,7 @@ int Jugar(char tablero[][3], tLista* listaJugadores, int dif, tLista* ListaParti
 
         while(cantPartidasJugadas<configuracion->CantPartidas)
         {
+            turno = 'X';
 
             while(ganador == ' ' && movimientos < TAM*TAM)
             {

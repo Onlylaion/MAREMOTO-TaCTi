@@ -8,6 +8,7 @@
 #define ERROR_MEM 2
 #define ERROR_ARCH 3
 #define ERROR 0
+#define SIN_MEM 2
 
 typedef struct sNodo
 {

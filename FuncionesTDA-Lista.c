@@ -38,7 +38,7 @@ int listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamE
     while(*lb)
     {
         if(!cmp((*lb)->info, elem)){
-            return 0;
+            return ERROR;
         }
 
         lb = &(*lb)->sig;
@@ -46,12 +46,12 @@ int listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamE
 
     nuevo= malloc(sizeof(tNodo));
     if(!nuevo)
-        return 2;
+        return SIN_MEM;
 
     nuevo->info = malloc(tamElem);
     if(!nuevo->info){
         free(nuevo);
-        return 2;
+        return SIN_MEM;
     }
 
     nuevo->tamInfo=tamElem;

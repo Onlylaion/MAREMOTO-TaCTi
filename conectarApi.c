@@ -23,6 +23,7 @@ void prepararDatoJSON(tLista* listaJugadores, tConfiguracion* configuracion, cha
     // Cerrar el JSON
     snprintf(json_data + pos, TAM_MAX_JSON - pos, "]}");
 }
+
 // Función que maneja la respuesta de la solicitud HTTP
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -42,8 +43,9 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
     return realsize;
 }
 
-CURLcode peticionGET(CURL *curl, tRespuesta *respuesta, char *path){
+CURLcode peticionGET(tRespuesta *respuesta, char *path){
     CURLcode res;
+    CURL* curl;
     // Inicializar el manejo de curl
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();
@@ -159,12 +161,12 @@ int compararJugAPI(const void *a, const void *b){
 
 
             sscanf(bb->fyh, "%2d/%2d/%4d %2d:%2d:%2d",
-                   &fecha1.dia,
-                   &fecha1.mes,
-                   &fecha1.anio,
-                   &fecha1.hora,
-                   &fecha1.minutos,
-                   &fecha1.segundos);
+                   &fecha2.dia,
+                   &fecha2.mes,
+                   &fecha2.anio,
+                   &fecha2.hora,
+                   &fecha2.minutos,
+                   &fecha2.segundos);
 
             resultado = fecha1.anio - fecha2.anio;
             if(resultado == 0){

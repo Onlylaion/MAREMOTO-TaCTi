@@ -5,7 +5,7 @@
 #include <string.h>
 #include "TDALista.h"
 #include "Juego.h"
-#define TAM_MAX_JSON 200
+
 
 typedef struct {
     char nombre[50];
@@ -27,11 +27,11 @@ typedef struct {
     int segundos;
 } tFechaHora;
 
+
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
-CURLcode peticionGET(CURL *curl, tRespuesta *respuesta, char *path);
+CURLcode peticionGET(tRespuesta *respuesta, char *path);
 CURLcode peticionPOST(tRespuesta *respuesta,tLista* listaJugadores,char* pathUrl, char* json_data);
 int parsearJugadores(tRespuesta *res, tJugadorAPI *jugador);
-void prepararDatoJSON(tLista* listaJugadores, tConfiguracion* configuracion, char json_data[TAM_MAX_JSON]);
 
 int compararJugAPI(const void *a, const void *b);
 void actualizarJugador(void *a, void *b);

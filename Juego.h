@@ -4,10 +4,11 @@
 #include "conectarApi.h"
 #include <stdio.h>
 #define TAM 3
-#define TAM_URL 50
+#define TAM_URL 100
 #define TAM_CADENA_ARCH 100
-#define TAM_CADENA 20
+#define TAM_CADENA 100
 #define ARCHIVO_CONFIG 1
+#define TAM_MAX_JSON 200
 
 typedef struct
 {
@@ -33,6 +34,8 @@ typedef struct
 
 }tConfiguracion;
 
+void normalizar_minusculas(char* str);
+void prepararDatoJSON(tLista* listaJugadores,tConfiguracion* configuracion, char json_data[TAM_MAX_JSON]);
 void mostrarJugador(const void* a,const void* b);
 int compararPuntajeTotal(const void* a, const void* b);
 int compararPuntajeTotalIgual(const void* a, const void* b);
