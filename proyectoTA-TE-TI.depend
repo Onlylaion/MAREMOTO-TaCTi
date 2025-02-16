@@ -117,10 +117,10 @@
 	<curl/curl.h>
 	<string.h>
 
-1739680092 source:c:\users\pc\desktop\maremoto-tacti\conectarapi.c
+1739740561 source:c:\users\pc\desktop\maremoto-tacti\conectarapi.c
 	"conectarApi.h"
 
-1739678549 c:\users\pc\desktop\maremoto-tacti\conectarapi.h
+1739728398 c:\users\pc\desktop\maremoto-tacti\conectarapi.h
 	<stdio.h>
 	<curl/curl.h>
 	<string.h>
@@ -136,7 +136,7 @@
 
 1739678159 c:\users\pc\desktop\maremoto-tacti\tdalista.h
 
-1739680763 source:c:\users\pc\desktop\maremoto-tacti\juego.c
+1739739858 source:c:\users\pc\desktop\maremoto-tacti\juego.c
 	<stdio.h>
 	<stdlib.h>
 	<windows.h>
@@ -144,12 +144,12 @@
 	<string.h>
 	"Juego.h"
 
-1739680239 c:\users\pc\desktop\maremoto-tacti\juego.h
+1739739858 c:\users\pc\desktop\maremoto-tacti\juego.h
 	"TDALista.h"
 	"conectarApi.h"
 	<stdio.h>
 
-1739675676 source:c:\users\pc\desktop\maremoto-tacti\main.c
+1739684181 source:c:\users\pc\desktop\maremoto-tacti\main.c
 	"Juego.h"
 	"TDALista.h"
 	"conectarApi.h"

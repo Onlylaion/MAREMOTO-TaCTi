@@ -18,8 +18,8 @@ int main(int arg,char** arg2)
     listaCrear(&listaPartidas);
     inicializarTablero(tablero);
     obtenerDatosArchConfiguracion(arg2[ARCHIVO_CONFIG],&configuracion);
-
     menu(&listaJugadores,&listaPartidas,&configuracion, tablero);
+
 }
 
 

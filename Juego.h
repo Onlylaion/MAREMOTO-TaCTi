@@ -34,13 +34,14 @@ typedef struct
 
 }tConfiguracion;
 
+
 void normalizar_minusculas(char* str);
-void prepararDatoJSON(tLista* listaJugadores,tConfiguracion* configuracion, char json_data[TAM_MAX_JSON]);
 void mostrarJugador(const void* a,const void* b);
 int compararPuntajeTotal(const void* a, const void* b);
 int compararPuntajeTotalIgual(const void* a, const void* b);
 int cmpNombres(const void* a, const void* b);
 
+void prepararDatoJSON(tLista* listaJugadores, tConfiguracion* configuracion, char* json_data,unsigned tamJSON);
 void inicializarTablero(char tablero[TAM][TAM]);
 void mostrarTablero(char tablero[TAM][TAM]);
 char verificarGanador(char tablero[TAM][TAM]);

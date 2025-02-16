@@ -30,7 +30,7 @@ typedef struct {
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
 CURLcode peticionGET(tRespuesta *respuesta, char *path);
-CURLcode peticionPOST(tRespuesta *respuesta,tLista* listaJugadores,char* pathUrl, char* json_data);
+CURLcode peticionPOST(tRespuesta *respuesta,tLista* listaJugadores,char* pathUrl, char* jsonData);
 int parsearJugadores(tRespuesta *res, tJugadorAPI *jugador);
 
 int compararJugAPI(const void *a, const void *b);

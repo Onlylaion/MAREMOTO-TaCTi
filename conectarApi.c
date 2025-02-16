@@ -1,13 +1,13 @@
 #include "conectarApi.h"
 
 
-void prepararDatoJSON(tLista* listaJugadores, tConfiguracion* configuracion, char json_data[TAM_MAX_JSON])
+void prepararDatoJSON(tLista* listaJugadores, tConfiguracion* configuracion, char* jsonData,unsigned tamJSON)
 {
     char cadena[TAM_CADENA];
     int pos = 0;
 
     // Iniciar el JSON
-    pos += snprintf(json_data + pos, TAM_MAX_JSON, "{ \"CodigoGrupo\": \"%s\", \"Jugadores\": [", configuracion->codIdenGrupo);
+    pos += snprintf(jsonData + pos, tamJSON, "{ \"CodigoGrupo\": \"%s\", \"Jugadores\": [", configuracion->codIdenGrupo);
 
     // Recorrer la lista de jugadores y agregarlos al JSON cadena
     while(*listaJugadores)
@@ -18,10 +18,10 @@ void prepararDatoJSON(tLista* listaJugadores, tConfiguracion* configuracion, cha
 
         // Agregar coma entre elementos, excepto
         listaJugadores=&(*listaJugadores)->sig;
-        pos += snprintf(json_data + pos, TAM_MAX_JSON - pos, "%s%s", cadena, (*listaJugadores) ? ", " : "");
+        pos += snprintf(jsonData + pos, tamJSON - pos, "%s%s", cadena, (*listaJugadores) ? ", " : "" );
     }
     // Cerrar el JSON
-    snprintf(json_data + pos, TAM_MAX_JSON - pos, "]}");
+    snprintf(jsonData + pos, tamJSON - pos, "]}");
 }
 
 // Función que maneja la respuesta de la solicitud HTTP
@@ -68,7 +68,7 @@ CURLcode peticionGET(tRespuesta *respuesta, char *path){
     return res;
 }
 
-CURLcode peticionPOST(tRespuesta *respuesta,tLista* listaJugadores,char* pathUrl, char* json_data){
+CURLcode peticionPOST(tRespuesta *respuesta,tLista* listaJugadores,char* pathUrl, char* jsonData){
     CURLcode res;
     CURL* curl;
     struct curl_slist *headers = NULL;
@@ -90,7 +90,7 @@ CURLcode peticionPOST(tRespuesta *respuesta,tLista* listaJugadores,char* pathUrl
     curl_easy_setopt(curl, CURLOPT_POST, 1L);
 
     // Enviar los datos JSON
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_data);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonData);
 
     // Configurar los encabezados
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
@@ -207,5 +207,5 @@ void actualizarJugador(void *a, void *b){
 void mostrarJugadorAPI(const void *a, const void *b){
     tJugadorAPI *aa = (tJugadorAPI *) a;
     int posicion = *(int *) b;
-    printf("%02d - Jugador: %s - Puntaje total: %02d - Ultima partida: %s \n", posicion, aa->nombre, aa->puntaje, aa->fyh);
+    printf("%02d - Jugador: %-15s - Puntaje total: %3d \t- Ultima partida: %20s\n", posicion, aa->nombre, aa->puntaje, aa->fyh);
 }

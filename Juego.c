@@ -191,7 +191,7 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
     char opcion;
     int dif;
     tLista listaRanking;
-    char json_data[TAM_MAX_JSON];
+    char jsonData[TAM_MAX_JSON];
     tRespuesta respuesta;
 
     do
@@ -222,8 +222,10 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
                     Jugar(tablero,listaJugadores,dif,listaPartidas,configuracion);
                     ordenarLista(listaJugadores,compararPuntajeTotal);
                     generarInformeDeGrupo(listaJugadores,listaPartidas,configuracion->CantPartidas,compararPuntajeTotalIgual);
-                    prepararDatoJSON(listaJugadores,configuracion,json_data);
-                    peticionPOST(&respuesta,listaJugadores,configuracion->urlApi,json_data);
+                    prepararDatoJSON(listaJugadores,configuracion,jsonData,sizeof(jsonData));
+                    peticionPOST(&respuesta,listaJugadores,configuracion->urlApi,jsonData);
+                    vaciarLista(listaJugadores);
+                    vaciarLista(listaPartidas);
 
                 }
                 else
@@ -268,7 +270,7 @@ int obtenerRanking(tLista *lista, tConfiguracion* configuracion){
     tRespuesta resAPI  = {NULL, 0};
     char pathGet[TAM_CADENA_ARCH];
 
-    snprintf(pathGet, TAM_CADENA_ARCH, "%s/%s", configuracion->urlApi, configuracion->codIdenGrupo);
+    snprintf(pathGet, sizeof(pathGet), "%s/%s", configuracion->urlApi, configuracion->codIdenGrupo);
 
     res = peticionGET(&resAPI, pathGet);
     if (res != CURLE_OK){
