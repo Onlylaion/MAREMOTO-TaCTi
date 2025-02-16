@@ -68,7 +68,7 @@ void registrarEnInformePuntosTotalesXJugador(FILE* arch,int PuntosTotales);
 
 ///ESTO ES DE PRUEBA:
 void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configuracion, char tablero[TAM][TAM]);
-int Jugar(char tablero[][3], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion);
+int Jugar(char tablero[][TAM], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion);
 void ingresarJugadores(tLista* pl);
 int obtenerDatosArchConfiguracion(char* ruta, tConfiguracion* configuracion);
 #endif // JUEGO_H_INCLUDED

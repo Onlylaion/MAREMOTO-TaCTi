@@ -507,15 +507,10 @@ void quienGana(tNodo* listaJugadores,tLista* partidas,char tablero[][TAM],char g
 int preparadoSiONo(void* jugador )
 {
     tJugador* a = (tJugador*)jugador;
-    char opcion[3];
-    do
-    {
-        system("cls");
-        printf("Jugador %s, estas preparado?\nPresiona enter para continuar... ",a->nombre);
-        fflush(stdin);
-        getchar();
-    }
-    while( strcmpi(opcion,"SI")!=0);
+    system("cls");
+    printf("Jugador %s, estas preparado?\nPresiona enter para continuar... ",a->nombre);
+    fflush(stdin);
+    getchar();
     return TODO_OK;
 }
 
@@ -612,7 +607,7 @@ void cargarDificultad(int* num)
 
 // Modifiqué jugar para que haga lo mismo con dos ifs menos que eran muy parecidos. Agregué los char jugador y ia para no usar 'x' o 'y' directamente. Aparte, estos char son necesarios
 // para que ande bien la funcion de la IA.
-int Jugar(char tablero[][3], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion)
+int Jugar(char tablero[][TAM], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion)
 {
     char ganador = ' ';
     char turno;
