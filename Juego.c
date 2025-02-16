@@ -6,6 +6,36 @@
 #include "Juego.h"
 #include "TDALista.h"
 
+int cmpNombres(const void* a, const void* b)
+{
+    return strcmp((((tJugador*)a)->nombre), (((tJugador*)b)->nombre));
+}
+
+void ingresarJugadores(tLista* pl)
+{
+    tJugador jugador;
+    int cantidad=0;
+
+    printf("Ingresar Nombres(termina con FIN/fin):\n");
+    scanf("%s",jugador.nombre);
+    jugador.puntaje=0;
+
+    while(strcmpi(jugador.nombre,"FIN")!=0)
+    {
+        if(!listaInsertarEnPosAleatoria(pl,cantidad,&jugador,sizeof(jugador),cmpNombres)){
+            printf("Error: Nombre duplicado. Intente nuevamente.\n");
+        } else {
+            cantidad++;
+            jugador.puntaje=0;
+        }
+        fflush(stdin);
+        scanf("%s",jugador.nombre);
+    }
+
+    system("cls");
+}
+
+
 int mostrarJugador(void* a, void* b)
 {
     int* posicion= (int*)b;
