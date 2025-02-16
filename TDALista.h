@@ -20,7 +20,7 @@ typedef tNodo* tLista;
 
 void listaCrear(tLista * l);
 void listaInsertarAlInicio(tLista *l,void* elem, unsigned tamElem);
-void listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamElem);
+int listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamElem, int (*cmp)(const void* a, const void* b));
 int listaInsertarAlFinal(tLista* l,void* elem,unsigned tamElem);
 int ordenarLista(tLista* l,int (*cmp)(const void*, const void* ));
 void vaciarLista(tLista *l);
