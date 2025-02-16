@@ -29,43 +29,51 @@ void listaInsertarAlInicio(tLista *l,void* elem, unsigned tamElem)
     *l=nuevo;
 }
 
-void listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamElem)
+int listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamElem, int (*cmp)(const void* a, const void* b))
 {
-
     tNodo* nuevo;
+    tLista* lb = l;
     int n, i=0;
+
+    while(*lb)
+    {
+        if(!cmp((*lb)->info, elem)){
+            return 0;
+        }
+
+        lb = &(*lb)->sig;
+    }
 
     nuevo= malloc(sizeof(tNodo));
     if(!nuevo)
-        return;
+        return 2;
 
     nuevo->info = malloc(tamElem);
-    if(!nuevo->info)
-    {
+    if(!nuevo->info){
         free(nuevo);
-        return;
+        return 2;
     }
+
     nuevo->tamInfo=tamElem;
     memcpy(nuevo->info,elem,tamElem);
 
-    if(!*l)
+    if(*l)
     {
-        nuevo->sig=*l;
-        *l=nuevo;
-        return;
+        n= rand()%(limite+1);
+
+        while(i<n && (*l)->sig)
+        {
+            l = &(*l)->sig;
+            i++;
+        }
     }
 
-    n= rand()%(limite+1);
-
-
-    while(i< n && (*l)->sig)
-    {
-        l = &(*l)->sig;
-        i++;
-    }
     nuevo->sig= *l;
     *l = nuevo;
+
+    return 1;
 }
+
 int listaInsertarAlFinal(tLista* l,void* elem,unsigned tamElem)
 {
     tNodo* nuevo= malloc(sizeof(tNodo));
