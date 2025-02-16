@@ -216,6 +216,7 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
             {
                 ingresarJugadores(listaJugadores);
                 cargarDificultad(&dif);
+                system("cls");
                 if(*listaJugadores)
                 {
                     mostrarEnOrdenJugadores(listaJugadores,mostrarJugador);
@@ -454,11 +455,14 @@ void actualizarPantalla(char tablero[TAM][TAM], char jugador, char ia, char turn
     if(turno!='\0' && turno==jugador)
         printf("\n\nTurno de JUGADOR (%c):", jugador);
     else if(turno!='\0')
+    {
         printf("\n\nTurno de IA (%c):", ia);
+    }
     else
         printf("\n\nFIN DEL JUEGO!");
 
     mostrarTablero(tablero);
+    Sleep(1000);
 
     return;
 }
