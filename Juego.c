@@ -12,25 +12,46 @@ int cmpNombres(const void* a, const void* b)
     return strcmp((((tJugador*)a)->nombre), (((tJugador*)b)->nombre));
 }
 
+void normalizar_minusculas(char* str)
+{
+    while (*str != '\0') {
+        *str = tolower((unsigned char)*str);  // Convertir a minúsculas
+        str++;  // Mover al siguiente carácter
+    }
+}
+
 void ingresarJugadores(tLista* pl)
 {
     tJugador jugador;
-    int cantidad=0;
+    int cantidad = 0;
 
-    printf("Ingresar Nombres(termina con FIN/fin):\n");
-    scanf("%s",jugador.nombre);
-    jugador.puntaje=0;
+    printf("Ingresar Nombres (termina con FIN/fin):\n");
 
-    while(strcmpi(jugador.nombre,"FIN")!=0)
+    // Usamos fgets para leer el nombre, permitiendo espacios
+    fgets(jugador.nombre, sizeof(jugador.nombre), stdin);
+    jugador.nombre[strcspn(jugador.nombre, "\n")] = '\0';  // Eliminar salto de línea
+
+    jugador.puntaje = 0;
+
+    // Convertir el nombre ingresado a minúsculas
+    normalizar_minusculas(jugador.nombre);
+
+    while (strcmp(jugador.nombre, "fin") != 0)  // Comparar con "fin" en minúsculas
     {
-        if(!listaInsertarEnPosAleatoria(pl,cantidad,&jugador,sizeof(jugador),cmpNombres)){
+        if (!listaInsertarEnPosAleatoria(pl, cantidad, &jugador, sizeof(jugador), cmpNombres)) {
             printf("Error: Nombre duplicado. Intente nuevamente.\n");
         } else {
             cantidad++;
-            jugador.puntaje=0;
+            jugador.puntaje = 0;
         }
-        fflush(stdin);
-        scanf("%s",jugador.nombre);
+
+        // Volver a leer el siguiente nombre con fgets para permitir espacios
+        printf("Ingresar otro nombre (termina con FIN/fin):\n");
+        fgets(jugador.nombre, sizeof(jugador.nombre), stdin);
+        jugador.nombre[strcspn(jugador.nombre, "\n")] = '\0';  // Eliminar salto de línea
+
+        // Convertir el nombre a minúsculas antes de la comparación
+        normalizar_minusculas(jugador.nombre);
     }
 
     system("cls");
@@ -242,14 +263,14 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
     return;
 }
 
-int obtenerRanking(tLista *lista, tConfiguracion* configuracion){
+int obtenerRanking(tLista *lista, tConfiguracion* configuracion)
+{
     CURL *curl;
     CURLcode res;
     tJugadorAPI jugador;
     tRespuesta resAPI  = {NULL, 0};
     char pathGet[TAM_CADENA_ARCH];
-    sprintf(pathGet, "%s/%s", configuracion->urlApi, configuracion->codIdenGrupo);
-
+    snprintf(pathGet, "%s/%s", configuracion->urlApi, configuracion->codIdenGrupo);
     res = peticionGET(curl, &resAPI, pathGet);
     if (res != CURLE_OK){
         printf("Error en la solicitud a la API.\n");

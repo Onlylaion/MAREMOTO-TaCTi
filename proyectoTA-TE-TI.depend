@@ -186,3 +186,39 @@
 	"TDALista.h"
 	"conectarApi.h"
 
+1739673242 source:c:\users\usuario\documents\github\maremoto-tacti\conectarapi.c
+	"conectarApi.h"
+
+1739673242 c:\users\usuario\documents\github\maremoto-tacti\conectarapi.h
+	<stdio.h>
+	<curl/curl.h>
+	<string.h>
+
+1739675922 source:c:\users\usuario\documents\github\maremoto-tacti\funcionestda-lista.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	"TDALista.h"
+
+1739675922 c:\users\usuario\documents\github\maremoto-tacti\tdalista.h
+
+1739669568 source:c:\users\usuario\documents\github\maremoto-tacti\main.c
+	"Juego.h"
+	"TDALista.h"
+	"conectarApi.h"
+
+1739676221 c:\users\usuario\documents\github\maremoto-tacti\juego.h
+	"TDALista.h"
+	"conectarApi.h"
+	<stdio.h>
+
+1739677192 source:c:\users\usuario\documents\github\maremoto-tacti\juego.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	<time.h>
+	<string.h>
+	"Juego.h"
+	"TDALista.h"
+
