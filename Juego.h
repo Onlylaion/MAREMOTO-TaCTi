@@ -33,11 +33,9 @@ typedef struct
 
 }tConfiguracion;
 
-int mostrarJugador(void* a, void* b);
-int compararNombre(void*a, void* b);
+void mostrarJugador(const void* a,const void* b);
 int compararPuntajeTotal(const void* a, const void* b);
 int compararPuntajeTotalIgual(const void* a, const void* b);
-
 int cmpNombres(const void* a, const void* b);
 
 void inicializarTablero(char tablero[TAM][TAM]);
@@ -50,10 +48,10 @@ char quienEmpieza();
 char obtenerOpcionDeMenu();
 void detectarMovDelJugador(char tablero[TAM][TAM], char letra);
 int registrarMovEnTablero(char tablaTaTeTi[TAM][TAM], char letra, int x, int y);
-void mostrarEnOrdenJugadores(tLista* jugadores,int (*accion)(void*, void*));
+void mostrarEnOrdenJugadores(tLista* jugadores,void (*accion)(const void*,const void*));
 void quienGana(tNodo* listaJugadores,tLista* partidas,char tablero[][TAM],char ganador,char turnoJugador, void(*accion)(tLista*, void*, char[][TAM],int));
 int preparadoSiONo(void* jugador );
-
+int obtenerRanking(tLista *lista, tConfiguracion* configuracion);
 void registrarPartida(tLista* partidas, void* jugador, char tablero[][TAM],int puntajeObtenido);
 
 void cargarDificultad(int* num);
@@ -67,7 +65,7 @@ void registrarEnInformePuntosTotalesXJugador(FILE* arch,int PuntosTotales);
 
 ///ESTO ES DE PRUEBA:
 void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configuracion, char tablero[TAM][TAM]);
-int Jugar(char tablero[][3], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion, int (cmp)(void*, void*));
+int Jugar(char tablero[][3], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion);
 void ingresarJugadores(tLista* pl);
 int obtenerDatosArchConfiguracion(char* ruta, tConfiguracion* configuracion);
 #endif // JUEGO_H_INCLUDED

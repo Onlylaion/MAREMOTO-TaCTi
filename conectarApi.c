@@ -1,5 +1,28 @@
 #include "conectarApi.h"
 
+
+void prepararDatoJSON(tLista* listaJugadores, tConfiguracion* configuracion, char json_data[TAM_MAX_JSON])
+{
+    char cadena[TAM_CADENA];
+    int pos = 0;
+
+    // Iniciar el JSON
+    pos += snprintf(json_data + pos, TAM_MAX_JSON, "{ \"CodigoGrupo\": \"%s\", \"Jugadores\": [", configuracion->codIdenGrupo);
+
+    // Recorrer la lista de jugadores y agregarlos al JSON cadena
+    while(*listaJugadores)
+    {
+        snprintf(cadena, sizeof(cadena), "{\"nombre\": \"%s\", \"puntos\": %d}",
+                 ((tJugador*)(*listaJugadores)->info)->nombre,
+                 ((tJugador*)(*listaJugadores)->info)->puntaje);
+
+        // Agregar coma entre elementos, excepto
+        listaJugadores=&(*listaJugadores)->sig;
+        pos += snprintf(json_data + pos, TAM_MAX_JSON - pos, "%s%s", cadena, (*listaJugadores) ? ", " : "");
+    }
+    // Cerrar el JSON
+    snprintf(json_data + pos, TAM_MAX_JSON - pos, "]}");
+}
 // Función que maneja la respuesta de la solicitud HTTP
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -43,18 +66,10 @@ CURLcode peticionGET(CURL *curl, tRespuesta *respuesta, char *path){
     return res;
 }
 
-CURLcode peticionPOST(CURL *curl, tRespuesta *respuesta, char *path){
+CURLcode peticionPOST(tRespuesta *respuesta,tLista* listaJugadores,char* pathUrl, char* json_data){
     CURLcode res;
+    CURL* curl;
     struct curl_slist *headers = NULL;
-
-    const char *json_data = "{"
-            "\"CodigoGrupo\": \"MARFIL\","
-            "\"Jugadores\": [{"
-                "\"nombre\": \"ejemplo5\","
-                "\"puntos\": 30"
-            "}]"
-        "}";
-
 
     // Inicializar el manejo de curl
     curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -67,7 +82,7 @@ CURLcode peticionPOST(CURL *curl, tRespuesta *respuesta, char *path){
     headers = curl_slist_append(headers, "Content-Type: application/json");
 
     // Configurar la URL
-    curl_easy_setopt(curl, CURLOPT_URL, path);
+    curl_easy_setopt(curl, CURLOPT_URL, pathUrl);
 
     // Indicar que es una solicitud POST
     curl_easy_setopt(curl, CURLOPT_POST, 1L);

@@ -24,6 +24,7 @@ int listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamE
 int listaInsertarAlFinal(tLista* l,void* elem,unsigned tamElem);
 int ordenarLista(tLista* l,int (*cmp)(const void*, const void* ));
 void vaciarLista(tLista *l);
-void listaFuncionMap(tLista* l, int (*accion)(void*,void*));
+void listaFuncionMap(tLista* l, void (*accion)(const void*,const void*));
+int insertarOrdenadoLimitadoSinDuplicado(tLista* pl, int limite, const void* elem, unsigned tamElem,int (*cmp)(const void*, const void*));
 
 #endif // TDALISTA_H_INCLUDED

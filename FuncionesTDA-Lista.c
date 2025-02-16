@@ -201,7 +201,7 @@ void vaciarLista(tLista *l)
         free(elim);
     }
 }
-void listaFuncionMap(tLista* l, int (*accion)(void*,void*))
+void listaFuncionMap(tLista* l, void (*accion)(const void*,const void*))
 {
     int i=0;
     while(*l)
