@@ -102,6 +102,56 @@ int listaInsertarAlFinal(tLista* l,void* elem,unsigned tamElem)
 }
 
 
+int insertarOrdenadoLimitadoSinDuplicado(tLista* pl, int limite, const void* elem, unsigned tamElem,
+                        int (*cmp)(const void*, const void*)){
+    tNodo* nuevo;
+    tNodo *elim;
+    int n = 0, resultado = 0;
+
+    while( *pl && n < limite && (resultado = cmp((*pl)->info, elem) > 0)){
+        pl = &(*pl)->sig;
+        n++;
+    }
+
+    if( n == limite && resultado > 0 ){
+        return LIMITE_ALCANZADO;
+    }
+
+    nuevo = (tNodo*) malloc(sizeof(tNodo));
+    if(!nuevo)
+        return ERROR;
+
+    nuevo->info = malloc(tamElem);
+
+    if(!nuevo->info){
+        free(nuevo);
+        return ERROR;
+    }
+
+    memcpy(nuevo->info, elem, tamElem);
+    nuevo->tamInfo = tamElem;
+    nuevo->sig = *pl;
+    *pl = nuevo;
+
+    if((*pl)->sig && n < limite){
+
+        while((*pl)->sig && n < limite){
+            pl = &(*pl)->sig;
+            n++;
+        }
+
+        //Elimino el ultimo
+        if(n == limite){
+            elim = *pl;
+            *pl = NULL;
+            free(elim->info);
+            free(elim);
+        }
+    }
+
+    return TODO_OK;
+}
+
 int ordenarLista(tLista* l,int (*cmp)(const void*,const void*))
 {
 

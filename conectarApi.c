@@ -19,7 +19,7 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
     return realsize;
 }
 
-CURLcode peticionGET(CURL *curl, tRespuesta *respuesta){
+CURLcode peticionGET(CURL *curl, tRespuesta *respuesta, char *path){
     CURLcode res;
     // Inicializar el manejo de curl
     curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -29,7 +29,7 @@ CURLcode peticionGET(CURL *curl, tRespuesta *respuesta){
         return CURLE_FAILED_INIT;
 
     // Establecer la URL de la solicitud GET
-    curl_easy_setopt(curl, CURLOPT_URL, "https://algoritmos-api.azurewebsites.net/api/TaCTi/MARFIL");
+    curl_easy_setopt(curl, CURLOPT_URL, path);
 
     // Establecer la función de retorno de llamada para manejar la respuesta
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
@@ -43,7 +43,7 @@ CURLcode peticionGET(CURL *curl, tRespuesta *respuesta){
     return res;
 }
 
-CURLcode peticionPOST(CURL *curl, tRespuesta *respuesta){
+CURLcode peticionPOST(CURL *curl, tRespuesta *respuesta, char *path){
     CURLcode res;
     struct curl_slist *headers = NULL;
 
@@ -67,7 +67,7 @@ CURLcode peticionPOST(CURL *curl, tRespuesta *respuesta){
     headers = curl_slist_append(headers, "Content-Type: application/json");
 
     // Configurar la URL
-    curl_easy_setopt(curl, CURLOPT_URL, "https://algoritmos-api.azurewebsites.net/api/TaCTi");
+    curl_easy_setopt(curl, CURLOPT_URL, path);
 
     // Indicar que es una solicitud POST
     curl_easy_setopt(curl, CURLOPT_POST, 1L);
@@ -121,4 +121,74 @@ int parsearJugadores(tRespuesta *res, tJugadorAPI *jugador){
 
     *p = '\0';
     return 1;
+}
+
+int compararJugAPI(const void *a, const void *b){
+    tJugadorAPI *aa = (tJugadorAPI *) a;
+    tJugadorAPI *bb = (tJugadorAPI *) b;
+    tFechaHora fecha1, fecha2;
+
+
+    int resultado = strcmp(aa->nombre, bb->nombre);
+    if( resultado != 0){
+        resultado = aa->puntaje - bb->puntaje;
+        if ( resultado == 0){
+
+            sscanf(aa->fyh, "%2d/%2d/%4d %2d:%2d:%2d",
+                   &fecha1.dia,
+                   &fecha1.mes,
+                   &fecha1.anio,
+                   &fecha1.hora,
+                   &fecha1.minutos,
+                   &fecha1.segundos);
+
+
+            sscanf(bb->fyh, "%2d/%2d/%4d %2d:%2d:%2d",
+                   &fecha1.dia,
+                   &fecha1.mes,
+                   &fecha1.anio,
+                   &fecha1.hora,
+                   &fecha1.minutos,
+                   &fecha1.segundos);
+
+            resultado = fecha1.anio - fecha2.anio;
+            if(resultado == 0){
+                resultado = fecha1.mes - fecha2.mes;
+                if(resultado == 0){
+                    resultado = fecha1.dia - fecha2.dia;
+                    if(resultado == 0){
+                        resultado = fecha1.hora - fecha2.hora;
+
+                        if(resultado == 0){
+                            resultado = fecha1.minutos - fecha2.minutos;
+
+                            if(resultado == 0){
+                                resultado = fecha1.segundos - fecha2.segundos;
+                            } else {
+                                return 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    return resultado;
+
+}
+
+void actualizarJugador(void *a, void *b){
+    tJugadorAPI *aa = (tJugadorAPI *) a;
+    tJugadorAPI *bb = (tJugadorAPI *) b;
+
+    aa->puntaje += bb->puntaje;
+    strcpy(aa->fyh, bb->fyh);
+}
+
+void mostrarJugadorAPI(const void *a, const void *b){
+    tJugadorAPI *aa = (tJugadorAPI *) a;
+    int posicion = *(int *) b;
+    printf("%02d - Jugador: %s - Puntaje total: %02d - Ultima partida: %s \n", posicion, aa->nombre, aa->puntaje, aa->fyh);
 }

@@ -148,6 +148,7 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
 {
     char opcion;
     int dif;
+    tLista listaRanking;
 
     do
     {
@@ -191,6 +192,12 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
             break;
             case 'B':
             {
+                listaCrear(&listaRanking);
+                if(obtenerRanking(&listaRanking, configuracion)){
+                    printf("El ranking es: \n");
+                    listaFuncionMap(&listaRanking, mostrarJugadorAPI);
+                }
+                vaciarLista(&listaRanking);
 
             }
             break;
@@ -204,6 +211,30 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
 
     return;
 }
+
+int obtenerRanking(tLista *lista, tConfiguracion* configuracion){
+    CURL *curl;
+    CURLcode res;
+    tJugadorAPI jugador;
+    tRespuesta resAPI  = {NULL, 0};
+    char pathGet[TAM_CADENA_ARCH];
+    sprintf(pathGet, "%s/%s", configuracion->urlApi, configuracion->codIdenGrupo);
+
+    res = peticionGET(curl, &resAPI, pathGet);
+    if (res != CURLE_OK){
+        printf("Error en la solicitud a la API.\n");
+        return ERROR;
+    }
+    else{
+        while(parsearJugadores(&resAPI, &jugador)){
+            insertarOrdenadoLimitadoSinDuplicado(lista, 10, &jugador, sizeof(tJugadorAPI), compararJugAPI);
+        }
+    }
+    free(resAPI.info);
+    return TODO_OK;
+}
+
+
 
 void mostrarEnOrdenJugadores(tLista* jugadores,int (*accion)(void*, void*))
 {

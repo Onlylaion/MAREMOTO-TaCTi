@@ -3,6 +3,8 @@
 
 #define MINIMO(x,y)((x > y) ? x : y )
 #define TODO_OK 1
+#define DUPLICADO 2
+#define LIMITE_ALCANZADO 3
 #define ERROR_MEM 2
 #define ERROR_ARCH 3
 #define ERROR 0

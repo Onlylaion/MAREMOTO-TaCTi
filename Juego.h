@@ -1,6 +1,7 @@
 #ifndef JUEGO_H_INCLUDED
 #define JUEGO_H_INCLUDED
 #include "TDALista.h"
+#include "conectarApi.h"
 #include <stdio.h>
 #define TAM 3
 #define TAM_URL 50
@@ -26,7 +27,7 @@ typedef struct
 
 typedef struct
 {
-    char urlApi[TAM_URL];
+    char urlApi[TAM_CADENA_ARCH];
     char codIdenGrupo[TAM_CADENA];
     int CantPartidas;
 
