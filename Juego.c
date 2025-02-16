@@ -441,26 +441,6 @@ void actualizarPantalla(char tablero[TAM][TAM], char jugador, char ia, char turn
     return;
 }
 
-void ingresarJugadores(tLista* pl)
-{
-    tJugador jugador;
-    int cantidad=0;
-
-    printf("Ingresar Nombres(termina con FIN/fin):\n");
-    scanf("%s",jugador.nombre);
-    jugador.puntaje=0;
-
-    while(strcmpi(jugador.nombre,"FIN")!=0)
-    {
-        listaInsertarEnPosAleatoria(pl,cantidad,&jugador,sizeof(jugador));
-        cantidad++;
-        fflush(stdin);
-        scanf("%s",jugador.nombre);
-        jugador.puntaje=0;
-    }
-    system("cls");
-}
-
 void registrarPartida(tLista* partidas, void* jugador, char tablero[][TAM],int puntajeObtenido)
 {
     tPartida partida;
