@@ -38,6 +38,7 @@ int compararNombre(void*a, void* b);
 int compararPuntajeTotal(const void* a, const void* b);
 int compararPuntajeTotalIgual(const void* a, const void* b);
 
+int cmpNombres(const void* a, const void* b);
 
 void inicializarTablero(char tablero[TAM][TAM]);
 void mostrarTablero(char tablero[TAM][TAM]);
