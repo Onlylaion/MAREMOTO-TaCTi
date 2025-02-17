@@ -19,6 +19,7 @@ int main(int arg,char** arg2)
     listaCrear(&listaPartidas);
     listaCrear(&listaRanking);
     inicializarTablero(tablero);
+
     obtenerDatosArchConfiguracion(arg2[ARCHIVO_CONFIG],&configuracion);
     menu(&listaJugadores,&listaPartidas,&listaRanking,&configuracion, tablero);
 

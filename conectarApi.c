@@ -24,9 +24,10 @@ void prepararDatoJSON(tLista* listaJugadores, tConfiguracion* configuracion, cha
     snprintf(jsonData + pos, tamJSON - pos, "]}");
 }
 
-// Función que maneja la respuesta de la solicitud HTTP
+
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
+    // Función que maneja la respuesta de la solicitud HTTP
     size_t realsize = size * nmemb;
     tRespuesta *res = (tRespuesta*) userp;
     char *info = malloc(realsize + 1);

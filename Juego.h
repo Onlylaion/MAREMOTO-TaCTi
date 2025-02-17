@@ -49,16 +49,14 @@ char quienEmpieza();
 char obtenerOpcionDeMenu();
 void detectarMovDelJugador(char tablero[][TAM_TABLERO], char letra);
 int registrarMovEnTablero(char tablaTaTeTi[][TAM_TABLERO], char letra, int x, int y);
-void mostrarEnOrdenJugadores(tLista* jugadores,void (*accion)(const void*,const void*));
 void quienGana(tNodo* listaJugadores,tLista* partidas,char tablero[][TAM_TABLERO],char ganador,char turnoJugador, void(*accion)(tLista*, void*, char[][TAM_TABLERO],int));
 int preparadoSiONo(void* jugador );
 int obtenerRanking(tLista *lista, tConfiguracion* configuracion);
 void registrarPartida(tLista* partidas, void* jugador, char tablero[][TAM_TABLERO],int puntajeObtenido);
 void cargarDificultad(int* num);
-
-
 void menu(tLista* listaJugadores,tLista* listaPartidas,tLista* listaRanking,tConfiguracion* configuracion, char tablero[][TAM_TABLERO]);
 void Jugar(char tablero[][TAM_TABLERO], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion);
 void ingresarJugadores(tLista* pl);
 int obtenerDatosArchConfiguracion(char* ruta, tConfiguracion* configuracion);
+
 #endif // JUEGO_H_INCLUDED

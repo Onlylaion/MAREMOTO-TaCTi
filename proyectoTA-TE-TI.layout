@@ -2,83 +2,87 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
+	<File name="informe.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="56" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="utilidades.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="637" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="TDALista.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="869" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="conectarApi.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4155" topLine="105" />
-		</Cursor>
-	</File>
-	<File name="Juego.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="154" topLine="3" />
-		</Cursor>
-		<Folding>
-			<Collapse line="12" />
-			<Collapse line="62" />
-			<Collapse line="86" />
-			<Collapse line="122" />
-			<Collapse line="239" />
-			<Collapse line="264" />
-			<Collapse line="273" />
-			<Collapse line="286" />
-			<Collapse line="315" />
-			<Collapse line="333" />
-			<Collapse line="375" />
-			<Collapse line="406" />
-			<Collapse line="422" />
-			<Collapse line="500" />
-			<Collapse line="511" />
-			<Collapse line="529" />
-			<Collapse line="535" />
-		</Folding>
-	</File>
-	<File name="conectarApi.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="127" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="utilidades.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3020" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="5" />
-			<Collapse line="10" />
-			<Collapse line="17" />
-			<Collapse line="22" />
-			<Collapse line="27" />
-			<Collapse line="33" />
-			<Collapse line="41" />
-			<Collapse line="47" />
-		</Folding>
-	</File>
-	<File name="main.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="213" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="utilidades.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="0" />
+			<Cursor1 position="430" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="Juego.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="284" topLine="0" />
+			<Cursor1 position="430" topLine="19" />
 		</Cursor>
 	</File>
-	<File name="funciones.h" open="1" top="1" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="main.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="98" topLine="0" />
+			<Cursor1 position="626" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="FuncionesTDA-Lista.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
+	<File name="FuncionesTDA-Lista.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1691" topLine="68" />
+			<Cursor1 position="3846" topLine="175" />
 		</Cursor>
+	</File>
+	<File name="informe.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1776" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="conectarApi.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1269" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="conectarApi.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="706" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Juego.c" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5376" topLine="58" />
+		</Cursor>
+		<Folding>
+			<Collapse line="63" />
+			<Collapse line="123" />
+			<Collapse line="261" />
+			<Collapse line="284" />
+			<Collapse line="297" />
+			<Collapse line="328" />
+			<Collapse line="346" />
+			<Collapse line="389" />
+			<Collapse line="420" />
+			<Collapse line="436" />
+			<Collapse line="466" />
+			<Collapse line="486" />
+			<Collapse line="511" />
+			<Collapse line="521" />
+		</Folding>
+	</File>
+	<File name="utilidades.c" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4066" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="5" />
+			<Collapse line="10" />
+			<Collapse line="15" />
+			<Collapse line="20" />
+			<Collapse line="26" />
+			<Collapse line="35" />
+			<Collapse line="94" />
+			<Collapse line="100" />
+			<Collapse line="112" />
+			<Collapse line="145" />
+		</Folding>
 	</File>
 </CodeBlocks_layout_file>

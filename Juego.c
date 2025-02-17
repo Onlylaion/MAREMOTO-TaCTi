@@ -60,7 +60,7 @@ int obtenerDatosArchConfiguracion(char* ruta, tConfiguracion* configuracion)
     return TODO_OK;
 }
 
-int registrarMovEnTablero(char tablaTaTeTi[][3], char letra, int x, int y)
+int registrarMovEnTablero(char tablaTaTeTi[][TAM_TABLERO], char letra, int x, int y)
 {
 
     if(x>=11 && x<=17 && y>=6 && y<=9)
@@ -84,7 +84,7 @@ int registrarMovEnTablero(char tablaTaTeTi[][3], char letra, int x, int y)
     return 0;
 }
 
-void detectarMovDelJugador(char tablero[][3], char letra)
+void detectarMovDelJugador(char tablero[][TAM_TABLERO], char letra)
 {
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     DWORD eventos;
@@ -98,7 +98,7 @@ void detectarMovDelJugador(char tablero[][3], char letra)
     {
         ReadConsoleInput(hIn, &ir, 1, &eventos);
         // Si se detecta un evento de mouse y se presiona el botón izquierdo
-        if (ir.EventType == MOUSE_EVENT && ir.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+        if (ir.EventType == MOUSE_EVENT && ir.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED && ir.Event.MouseEvent.dwEventFlags != MOUSE_MOVED)
         {
             x = ir.Event.MouseEvent.dwMousePosition.X;
             y = ir.Event.MouseEvent.dwMousePosition.Y;
@@ -158,16 +158,13 @@ char obtenerOpcionDeMenu()
 
 }
 
-// en el menú ahora están las funciones 'ordenar lista' y 'generar informe'
+
 void menu(tLista* listaJugadores,tLista* listaPartidas,tLista* listaRanking,tConfiguracion* configuracion, char tablero[][TAM_TABLERO])
 {
-//variable selectora
+    // en el menú ahora están las funciones 'ordenar lista' y 'generar informe'
     char opcion;
-     //variable para nivel de dificultad
     int dif;
-    //esta cadena almacena en formato JSON
     char jsonData[TAM_MAX_JSON];
-    //almacena la respuesta de una petición
     tRespuesta respuesta;
 
     do
@@ -209,6 +206,10 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tLista* listaRanking,tCon
 
                     //generamos el informe acorde a la cantidad de partidas jugadas
                     generarInformeDeGrupo(listaJugadores,listaPartidas,configuracion->CantPartidas,compararPuntajeTotalIgual);
+                    printf("\nSe ha generado un informe de las partidas y puntajes obtenidos del grupo de jugadores.\nPresiona enter para continuar...");
+                    fflush(stdin);
+                    getchar();
+                    system("cls");
                     prepararDatoJSON(listaJugadores,configuracion,jsonData,sizeof(jsonData));
                     peticionPOST(&respuesta,configuracion->urlApi,jsonData);
                     listaVaciar(listaJugadores);
@@ -279,16 +280,6 @@ int obtenerRanking(tLista *lista, tConfiguracion* configuracion){
     return TODO_OK;
 }
 
-
-
-void mostrarEnOrdenJugadores(tLista* jugadores,void (*accion)(const void*,const void*))
-{
-    printf("Orden de Juego:\n\n");
-    listaFuncionMap(jugadores,accion);
-    printf("\nPresione enter para comenzar el juego...");
-    fflush(stdin);
-    getchar();
-}
 
 void inicializarTablero(char tablero[][TAM_TABLERO])
 {
@@ -483,11 +474,11 @@ void registrarPartida(tLista* partidas, void* jugador, char tablero[][TAM_TABLER
         for( j=0; j<TAM_TABLERO; j++)
             partida.tablero[i][j]= tablero[i][j];
     }
-    ///Cargamos el puntaje de la partida
+    //Cargamos el puntaje de la partida
     partida.puntajeObtenido = puntajeObtenido;
-    ///cargamos el nombre del jugador
+    //cargamos el nombre del jugador
     strcpy(partida.jugador,auxJugador->nombre);
-    ///insertamos toda la información
+    //insertamos toda la información
     listaInsertarAlFinal(partidas,&partida,sizeof(partida));
 }
 
@@ -554,17 +545,18 @@ void Jugar(char tablero[][TAM_TABLERO], tLista* listaJugadores, int dif, tLista*
 
     while(jugadores)
     {
+        //pregunto antes de iniciar al jugador si esta listo
         preparadoSiONo(jugadores->info);
 
         while(cantPartidasJugadas<configuracion->CantPartidas)
         {
             turno = 'X';
+            //asigno el simbolo de forma aleatoria, cada que termina una partida
             asignarSimbolos(&jugador, &ia);
 
             while(ganador == ' ' && movimientos < TAM_TABLERO*TAM_TABLERO)
             {
-
-                if(turno == jugador)
+                if(turno == jugador)//caso en el que el jugador comienza
                 {
                     actualizarPantalla(tablero,jugador,ia,turno);
                     detectarMovDelJugador(tablero,jugador);
@@ -572,7 +564,7 @@ void Jugar(char tablero[][TAM_TABLERO], tLista* listaJugadores, int dif, tLista*
                     ganador = verificarGanador(tablero);
                     turno = ia;
                 }
-                else
+                else//caso en el que la IA comienza
                 {
                     actualizarPantalla(tablero,jugador,ia,turno);
                     movimientoIA(tablero,ia,dif);
@@ -584,6 +576,9 @@ void Jugar(char tablero[][TAM_TABLERO], tLista* listaJugadores, int dif, tLista*
             }
 
             actualizarPantalla(tablero,jugador,ia,'\0');
+
+            //Determino el ganador de la partida por pantalla
+            //A su vez registro las partidas, en una lista para poder generar luego el informe
             quienGana(jugadores,ListaPartidas,tablero,ganador,jugador,registrarPartida);
 
             ganador=' ';
@@ -604,5 +599,5 @@ void Jugar(char tablero[][TAM_TABLERO], tLista* listaJugadores, int dif, tLista*
         jugadores=jugadores->sig;
         cantPartidasJugadas=0;
     }
-
+    system("cls");
 }

@@ -188,7 +188,7 @@
 	"TDALista.h"
 	"conectarApi.h"
 
-1739754214 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\conectarapi.c
+1739754980 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\conectarapi.c
 	"conectarApi.h"
 
 1739754214 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\conectarapi.h
@@ -200,7 +200,7 @@
 
 1739753764 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\tdalista.h
 
-1739754361 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\juego.h
+1739755886 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\juego.h
 	"TDALista.h"
 	"conectarApi.h"
 	<stdio.h>
@@ -212,7 +212,7 @@
 	<time.h>
 	"TDALista.h"
 
-1739754587 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\juego.c
+1739756087 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\juego.c
 	<stdio.h>
 	<stdlib.h>
 	<windows.h>
@@ -222,15 +222,15 @@
 	"utilidades.h"
 	"informe.h"
 
-1739753414 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\utilidades.h
+1739755318 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\utilidades.h
 	"Juego.h"
 
-1739753536 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\main.c
+1739755914 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\main.c
 	"Juego.h"
 	"TDALista.h"
 	"conectarApi.h"
 
-1739753414 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\utilidades.c
+1739755318 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\utilidades.c
 	"utilidades.h"
 	"Juego.h"
 	<string.h>
@@ -240,7 +240,7 @@
 	"Juego.h"
 	<string.h>
 
-1739754445 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\informe.h
+1739755886 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\informe.h
 	"TDALista.h"
 	<stdio.h>
 

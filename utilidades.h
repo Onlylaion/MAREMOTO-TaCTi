@@ -12,4 +12,5 @@ void mostrarJugadorAPI(const void *a, const void *b);
 int compararJugAPI(const void *a, const void *b);
 int parsearJugadores(tRespuesta *res, tJugadorAPI *jugador);
 void imprimirEncabezadoRanking();
+void mostrarEnOrdenJugadores(tLista* jugadores,void (*accion)(const void*,const void*));
 #endif // UTILIDADES_H_INCLUDED

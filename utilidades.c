@@ -37,7 +37,10 @@ int compararJugAPI(const void *a, const void *b){
     tJugadorAPI *aa = (tJugadorAPI *) a;
     tJugadorAPI *bb = (tJugadorAPI *) b;
     tFechaHora fecha1, fecha2;
-
+    //Esta función se encarga de ordenar jugadores según:
+    //Nombre (orden alfabético).
+    //Puntaje (mayor puntaje primero).
+    //Fecha y hora de la última partida (más reciente primero en caso de empate).
 
     int resultado = strcmp(aa->nombre, bb->nombre);
     if( resultado != 0){
@@ -139,3 +142,11 @@ int parsearJugadores(tRespuesta *res, tJugadorAPI *jugador){
     return 1;
 }
 
+void mostrarEnOrdenJugadores(tLista* jugadores,void (*accion)(const void*,const void*))
+{
+    printf("Orden de Juego:\n\n");
+    listaFuncionMap(jugadores,accion);
+    printf("\nPresione enter para comenzar el juego...");
+    fflush(stdin);
+    getchar();
+}
