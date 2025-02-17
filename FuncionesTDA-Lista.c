@@ -9,24 +9,25 @@ void listaCrear(tLista * l)
     *l = NULL;
 }
 
-void listaInsertarAlInicio(tLista *l,void* elem, unsigned tamElem)
+int listaInsertarAlInicio(tLista *l,void* elem, unsigned tamElem)
 {
     tNodo* nuevo;
 
     nuevo= malloc(sizeof(tNodo));
     if(!nuevo)
-        return;
+        return ERROR_MEM;
     nuevo->info = malloc(tamElem);
     if(!nuevo->info)
     {
         free(nuevo);
-        return;
+        return ERROR_MEM;
     }
     nuevo->tamInfo=tamElem;
     memcpy(nuevo->info,elem,tamElem);
 
     nuevo->sig=*l;
     *l=nuevo;
+    return TODO_OK;
 }
 
 int listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamElem, int (*cmp)(const void* a, const void* b))
@@ -46,12 +47,12 @@ int listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamE
 
     nuevo= malloc(sizeof(tNodo));
     if(!nuevo)
-        return SIN_MEM;
+        return ERROR_MEM;
 
     nuevo->info = malloc(tamElem);
     if(!nuevo->info){
         free(nuevo);
-        return SIN_MEM;
+        return ERROR_MEM;
     }
 
     nuevo->tamInfo=tamElem;
@@ -71,7 +72,7 @@ int listaInsertarEnPosAleatoria(tLista* l, int limite, void* elem, unsigned tamE
     nuevo->sig= *l;
     *l = nuevo;
 
-    return 1;
+    return TODO_OK;
 }
 
 int listaInsertarAlFinal(tLista* l,void* elem,unsigned tamElem)
@@ -110,7 +111,7 @@ int listaInsertarAlFinal(tLista* l,void* elem,unsigned tamElem)
 }
 
 
-int insertarOrdenadoLimitadoSinDuplicado(tLista* pl, int limite, const void* elem, unsigned tamElem,
+int insertarOrdenadoLimitado(tLista* pl, int limite, const void* elem, unsigned tamElem,
                         int (*cmp)(const void*, const void*)){
     tNodo* nuevo;
     tNodo *elim;
@@ -127,13 +128,13 @@ int insertarOrdenadoLimitadoSinDuplicado(tLista* pl, int limite, const void* ele
 
     nuevo = (tNodo*) malloc(sizeof(tNodo));
     if(!nuevo)
-        return ERROR;
+        return ERROR_MEM;
 
     nuevo->info = malloc(tamElem);
 
     if(!nuevo->info){
         free(nuevo);
-        return ERROR;
+        return ERROR_MEM;
     }
 
     memcpy(nuevo->info, elem, tamElem);
@@ -190,7 +191,7 @@ int ordenarLista(tLista* l,int (*cmp)(const void*,const void*))
     return 1;
 }
 
-void vaciarLista(tLista *l)
+void listaVaciar(tLista *l)
 {
     tNodo *elim;
     while(*l)
@@ -200,6 +201,10 @@ void vaciarLista(tLista *l)
         free(elim->info);
         free(elim);
     }
+}
+int listaVacia(tLista* l)
+{
+    return (!*l) ? 1 : 0;
 }
 void listaFuncionMap(tLista* l, void (*accion)(const void*,const void*))
 {

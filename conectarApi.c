@@ -43,7 +43,7 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
     return realsize;
 }
 
-CURLcode peticionGET(tRespuesta *respuesta, char *path){
+CURLcode peticionGET(tRespuesta *respuesta,const char *path){
     CURLcode res;
     CURL* curl;
     // Inicializar el manejo de curl
@@ -68,7 +68,7 @@ CURLcode peticionGET(tRespuesta *respuesta, char *path){
     return res;
 }
 
-CURLcode peticionPOST(tRespuesta *respuesta,tLista* listaJugadores,char* pathUrl, char* jsonData){
+CURLcode peticionPOST(tRespuesta *respuesta,const char* pathUrl,const char* jsonData){
     CURLcode res;
     CURL* curl;
     struct curl_slist *headers = NULL;
@@ -108,104 +108,7 @@ CURLcode peticionPOST(tRespuesta *respuesta,tLista* listaJugadores,char* pathUrl
     return res;
 }
 
-int parsearJugadores(tRespuesta *res, tJugadorAPI *jugador){
-    char *p = strrchr(res->info, '}');
-
-    if(!p){
-        return 0;
-    }
-
-    p--;
-    *p = '\0';
-
-    p = strrchr(res->info, ',');
-    p = strchr(p, ':');
-    strcpy(jugador->fyh, p + 2);
-    p = strrchr(res->info, ',');
-
-    *p = '\0';
-    p = strrchr(res->info, ',');
-    p = strchr(p, ':');
-    sscanf(p + 1, "%u", &jugador->puntaje);
-    p = strrchr(res->info, ',');
-
-    p--;
-    *p = '\0';
-    p = strrchr(res->info, '{');
-    p = strchr(p, ':');
-    strcpy(jugador->nombre, p + 2);
-    p = strrchr(res->info, '{');
-
-    *p = '\0';
-    return 1;
-}
-
-int compararJugAPI(const void *a, const void *b){
-    tJugadorAPI *aa = (tJugadorAPI *) a;
-    tJugadorAPI *bb = (tJugadorAPI *) b;
-    tFechaHora fecha1, fecha2;
 
 
-    int resultado = strcmp(aa->nombre, bb->nombre);
-    if( resultado != 0){
-        resultado = aa->puntaje - bb->puntaje;
-        if ( resultado == 0){
-
-            sscanf(aa->fyh, "%2d/%2d/%4d %2d:%2d:%2d",
-                   &fecha1.dia,
-                   &fecha1.mes,
-                   &fecha1.anio,
-                   &fecha1.hora,
-                   &fecha1.minutos,
-                   &fecha1.segundos);
 
 
-            sscanf(bb->fyh, "%2d/%2d/%4d %2d:%2d:%2d",
-                   &fecha2.dia,
-                   &fecha2.mes,
-                   &fecha2.anio,
-                   &fecha2.hora,
-                   &fecha2.minutos,
-                   &fecha2.segundos);
-
-            resultado = fecha1.anio - fecha2.anio;
-            if(resultado == 0){
-                resultado = fecha1.mes - fecha2.mes;
-                if(resultado == 0){
-                    resultado = fecha1.dia - fecha2.dia;
-                    if(resultado == 0){
-                        resultado = fecha1.hora - fecha2.hora;
-
-                        if(resultado == 0){
-                            resultado = fecha1.minutos - fecha2.minutos;
-
-                            if(resultado == 0){
-                                resultado = fecha1.segundos - fecha2.segundos;
-                            } else {
-                                return 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
-    }
-
-    return resultado;
-
-}
-
-void actualizarJugador(void *a, void *b){
-    tJugadorAPI *aa = (tJugadorAPI *) a;
-    tJugadorAPI *bb = (tJugadorAPI *) b;
-
-    aa->puntaje += bb->puntaje;
-    strcpy(aa->fyh, bb->fyh);
-}
-
-void mostrarJugadorAPI(const void *a, const void *b){
-    tJugadorAPI *aa = (tJugadorAPI *) a;
-    int posicion = *(int *) b;
-    printf("%02d - Jugador: %-15s - Puntaje total: %3d \t- Ultima partida: %20s\n", posicion, aa->nombre, aa->puntaje, aa->fyh);
-}

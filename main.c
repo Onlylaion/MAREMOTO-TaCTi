@@ -6,9 +6,10 @@
 int main(int arg,char** arg2)
 {
     srand(time(NULL));
-    char tablero[TAM][TAM];
+    char tablero[TAM_TABLERO][TAM_TABLERO];
     tLista listaJugadores;
     tLista listaPartidas;
+    tLista listaRanking;
     tConfiguracion configuracion;
 
     if(arg!=2)
@@ -16,9 +17,15 @@ int main(int arg,char** arg2)
 
     listaCrear(&listaJugadores);
     listaCrear(&listaPartidas);
+    listaCrear(&listaRanking);
     inicializarTablero(tablero);
     obtenerDatosArchConfiguracion(arg2[ARCHIVO_CONFIG],&configuracion);
-    menu(&listaJugadores,&listaPartidas,&configuracion, tablero);
+    menu(&listaJugadores,&listaPartidas,&listaRanking,&configuracion, tablero);
+
+
+    listaVaciar(&listaJugadores);
+    listaVaciar(&listaPartidas);
+    listaVaciar(&listaRanking);
 
 }
 

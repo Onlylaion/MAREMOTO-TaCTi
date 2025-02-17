@@ -4,71 +4,44 @@
 #include <time.h>
 #include <string.h>
 #include "Juego.h"
+#include "utilidades.h"
+#include "informe.h"
 
 
-int cmpNombres(const void* a, const void* b)
-{
-    return strcmp((((tJugador*)a)->nombre), (((tJugador*)b)->nombre));
-}
 
-void normalizar_minusculas(char* str)
-{
-    while (*str != '\0') {
-        *str = tolower((unsigned char)*str);  // Convertir a minúsculas
-        str++;  // Mover al siguiente carácter
-    }
-}
 
 void ingresarJugadores(tLista* pl)
 {
     tJugador jugador;
     int cantidad = 0;
+
     printf("Ingresar Nombres (termina con FIN/fin):\n");
 
-    // Usamos fgets para leer el nombre
+    // Usamos fgets para leer el nombre, permitiendo espacios
     fgets(jugador.nombre, sizeof(jugador.nombre), stdin);
-    jugador.nombre[strcspn(jugador.nombre, "\n")] = '\0';  // Eliminar salto de línea
-
+    jugador.nombre[strcspn(jugador.nombre, "\n")] = '\0';
     jugador.puntaje = 0;
 
     // Convertir el nombre ingresado a minúsculas
-    normalizar_minusculas(jugador.nombre);
+    //normalizar_minusculas(jugador.nombre);
 
-    // Mientras el jugador no ingrese "FIN" o "fin"
-    while (strcmp(jugador.nombre, "fin") != 0)  // Comparar con "fin" en minúsculas
+    while (strcmpi(jugador.nombre, "fin") != 0)
     {
-        listaInsertarEnPosAleatoria(pl, cantidad, &jugador, sizeof(jugador),cmpNombres);
-        cantidad++;
-
-        // Volver a leer el siguiente nombre
+        if (!listaInsertarEnPosAleatoria(pl, cantidad, &jugador, sizeof(jugador), cmpNombres))
+            printf("Error: Nombre duplicado. Intente nuevamente.\n");
+        else
+        {
+            cantidad++;
+            jugador.puntaje = 0;
+        }
+        // Volver a leer el siguiente nombre con fgets para permitir espacios
+        fflush(stdin);
         fgets(jugador.nombre, sizeof(jugador.nombre), stdin);
-        jugador.nombre[strcspn(jugador.nombre, "\n")] = '\0';  // Eliminar salto de línea
-
+        jugador.nombre[strcspn(jugador.nombre, "\n")] = '\0';
         // Convertir el nombre a minúsculas antes de la comparación
-        normalizar_minusculas(jugador.nombre);
-
-        jugador.puntaje = 0;
+        //        normalizar_minusculas(jugador.nombre);
     }
-
     system("cls");
-}
-
-void mostrarJugador(const void* a,const void* b)
-{
-    int* posicion= (int*)b;
-    tJugador* jugador=(tJugador*)a;
-    printf("%d-%s\n",*posicion,jugador->nombre);
-}
-
-
-int compararPuntajeTotal(const void* a, const void* b)
-{
-    return ((tJugador*)a)->puntaje < ((tJugador*)b)->puntaje ? 1 : -1;
-}
-
-int compararPuntajeTotalIgual(const void* a, const void* b)
-{
-    return ((tJugador*)a)->puntaje == ((tJugador*)b)->puntaje ? 1 : 0;
 }
 
 int obtenerDatosArchConfiguracion(char* ruta, tConfiguracion* configuracion)
@@ -80,7 +53,7 @@ int obtenerDatosArchConfiguracion(char* ruta, tConfiguracion* configuracion)
 
     fgets(cadena,TAM_CADENA_ARCH,arch);
     sscanf(cadena,"%[^|]|%[^\n]",configuracion->urlApi,configuracion->codIdenGrupo);
-    fgets(cadena,TAM,arch);
+    fgets(cadena,TAM_TABLERO,arch);
     sscanf(cadena,"%d",&configuracion->CantPartidas);
     fclose(arch);
 
@@ -186,16 +159,20 @@ char obtenerOpcionDeMenu()
 }
 
 // en el menú ahora están las funciones 'ordenar lista' y 'generar informe'
-void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configuracion, char tablero[TAM][TAM])
+void menu(tLista* listaJugadores,tLista* listaPartidas,tLista* listaRanking,tConfiguracion* configuracion, char tablero[][TAM_TABLERO])
 {
+//variable selectora
     char opcion;
+     //variable para nivel de dificultad
     int dif;
-    tLista listaRanking;
+    //esta cadena almacena en formato JSON
     char jsonData[TAM_MAX_JSON];
+    //almacena la respuesta de una petición
     tRespuesta respuesta;
 
     do
     {
+        //muestra las opciones en pantalla y verifica el ingreso correcto
         printf(" [A] Jugar\n\n [B] Ver ranking equipo\n\n [C] Salir\n ");
         opcion = obtenerOpcionDeMenu();
         fflush(stdin);
@@ -210,28 +187,37 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
         }
         else
         {
+            //En caso de elegir una opcion correcta
             switch(opcion)
             {
             case 'A':
             {
+                //solicitamos ingreso de los jugadores y la dificultad
                 ingresarJugadores(listaJugadores);
                 cargarDificultad(&dif);
                 system("cls");
+
+                //si hay jugadores en la lista se inicia el juego
                 if(*listaJugadores)
                 {
+                    //mostramos los jugadores en orden
                     mostrarEnOrdenJugadores(listaJugadores,mostrarJugador);
+                    //ejecutamos la lógica del juego
                     Jugar(tablero,listaJugadores,dif,listaPartidas,configuracion);
+                    //ordenamos la lista segun el puntaje
                     ordenarLista(listaJugadores,compararPuntajeTotal);
+
+                    //generamos el informe acorde a la cantidad de partidas jugadas
                     generarInformeDeGrupo(listaJugadores,listaPartidas,configuracion->CantPartidas,compararPuntajeTotalIgual);
                     prepararDatoJSON(listaJugadores,configuracion,jsonData,sizeof(jsonData));
-                    peticionPOST(&respuesta,listaJugadores,configuracion->urlApi,jsonData);
-                    vaciarLista(listaJugadores);
-                    vaciarLista(listaPartidas);
+                    peticionPOST(&respuesta,configuracion->urlApi,jsonData);
+                    listaVaciar(listaJugadores);
+                    listaVaciar(listaPartidas);
 
                 }
                 else
                 {
-                    printf("No se ha ingresado ningun jugador...");
+                    printf("No se ha ingresado ningun jugador. Presionar enter para avanzar al menu...");
                     fflush(stdin);
                     getchar();
                     system("cls");
@@ -241,19 +227,25 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
             break;
             case 'B':
             {
-                listaCrear(&listaRanking);
-                if(obtenerRanking(&listaRanking, configuracion)){
-                    printf("El ranking es: \n");
-                    listaFuncionMap(&listaRanking, mostrarJugadorAPI);
+                //Obtenemos los datos de la Api para realizar el ranking.
+                if(obtenerRanking(listaRanking, configuracion))
+                {
+                    if(!listaVacia(listaRanking))//verifico si la lista esta vacia, sino lo esta muestro el ranking.
+                    {
+                        imprimirEncabezadoRanking();
+                        listaFuncionMap(listaRanking, mostrarJugadorAPI);
+                    }
+                    else
+                        printf("No hay datos cargados en el ranking.\n");
                 }
-                printf("\nPresion enter para avanzar al menu...");
+                printf("\nPresionar enter para avanzar al menu...");
                 fflush(stdout);
                 getchar();
-                vaciarLista(&listaRanking);
+                listaVaciar(listaRanking);
 
             }
             break;
-            case 'C':
+            case 'C'://salimos del programa.
                 return;
             }
         }
@@ -264,6 +256,7 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tConfiguracion* configura
 
     return;
 }
+
 
 int obtenerRanking(tLista *lista, tConfiguracion* configuracion){
     CURLcode res;
@@ -279,9 +272,8 @@ int obtenerRanking(tLista *lista, tConfiguracion* configuracion){
         return ERROR;
     }
     else{
-        while(parsearJugadores(&resAPI, &jugador)){
-            insertarOrdenadoLimitadoSinDuplicado(lista, 10, &jugador, sizeof(tJugadorAPI), compararJugAPI);
-        }
+        while(parsearJugadores(&resAPI, &jugador))
+            insertarOrdenadoLimitado(lista, LIMITE_RANKING, &jugador, sizeof(tJugadorAPI), compararJugAPI);
     }
     free(resAPI.info);
     return TODO_OK;
@@ -291,19 +283,19 @@ int obtenerRanking(tLista *lista, tConfiguracion* configuracion){
 
 void mostrarEnOrdenJugadores(tLista* jugadores,void (*accion)(const void*,const void*))
 {
-    printf("Orden de Juego:\n");
+    printf("Orden de Juego:\n\n");
     listaFuncionMap(jugadores,accion);
     printf("\nPresione enter para comenzar el juego...");
     fflush(stdin);
     getchar();
 }
 
-void inicializarTablero(char tablero[TAM][TAM])
+void inicializarTablero(char tablero[][TAM_TABLERO])
 {
 
-    for (int i = 0; i < TAM; i++)
+    for (int i = 0; i < TAM_TABLERO; i++)
     {
-        for (int j = 0; j < TAM; j++)
+        for (int j = 0; j < TAM_TABLERO; j++)
         {
             tablero[i][j] = ' ';
         }
@@ -311,40 +303,42 @@ void inicializarTablero(char tablero[TAM][TAM])
 
 }
 
-void mostrarTablero(char tablero[TAM][TAM])
+void mostrarTablero(char tablero[][TAM_TABLERO])
 {
     printf("\n\n\n");
 
-    for (int i = 0; i < TAM; i++)
+    for (int i = 0; i < TAM_TABLERO; i++)
     {
         // Imprime las filas del tablero
         for (int fila = 0; fila < 4; fila++)
         {
-            printf("           "); // Espaciado para centrar el tablero
+            // Espaciado para centrar el tablero
+            printf("           ");
 
-            for (int j = 0; j < TAM; j++)
+
+            for (int j = 0; j < TAM_TABLERO; j++)
             {
                 if (fila == 2)
                     printf("   %c   ", tablero[i][j]);
                 else
                     printf("       ");
-
-                if (j < TAM - 1) printf("|");  // Separadores verticales
+                // Separadores verticales
+                if (j < TAM_TABLERO - 1) printf("|");
             }
             printf("\n");
         }
 
         // linea horizontal
-        if (i < TAM - 1)
+        if (i < TAM_TABLERO - 1)
             printf("           =======|=======|=======\n");
     }
 }
 
-char verificarGanador(char tablero[TAM][TAM])
+char verificarGanador(char tablero[][TAM_TABLERO])
 {
 
     // verifica horizontal y vertical
-    for(int i = 0; i < TAM; i++)
+    for(int i = 0; i < TAM_TABLERO; i++)
     {
         if (tablero[i][0] != ' ' && tablero[i][0] == tablero[i][1] && tablero[i][1] == tablero[i][2]) return tablero[i][0];
         if (tablero[0][i] != ' ' && tablero[0][i] == tablero[1][i] && tablero[1][i] == tablero[2][i]) return tablero[0][i];
@@ -357,9 +351,10 @@ char verificarGanador(char tablero[TAM][TAM])
     return ' ';
 }
 
-// IA con dos niveles de dificultad
-void movimientoIA(char tablero[TAM][TAM], char letraIA, int dificultad)
+
+void movimientoIA(char tablero[TAM_TABLERO][TAM_TABLERO], char letraIA, int dificultad)
 {
+    // IA con dos niveles de dificultad
     int fila, columna;
     char letraJug;
 
@@ -387,11 +382,11 @@ void movimientoIA(char tablero[TAM][TAM], char letraIA, int dificultad)
         }
 
     }
-
+    //movimiento aleatorio si no se encuentra una jugada ganadora o de bloqueo
     do
     {
-        fila = rand() % TAM;
-        columna = rand() % TAM;
+        fila = rand() % TAM_TABLERO;
+        columna = rand() % TAM_TABLERO;
     }
     while (tablero[fila][columna] != ' ');
 
@@ -400,13 +395,13 @@ void movimientoIA(char tablero[TAM][TAM], char letraIA, int dificultad)
     return;
 }
 
-int puedeGanar(char tablero[TAM][TAM], char jugador, int* fila, int* columna)
+int puedeGanar(char tablero[][TAM_TABLERO], char jugador, int* fila, int* columna)
 {
 
-    for (int i = 0; i < TAM; i++)
+    for (int i = 0; i < TAM_TABLERO; i++)
     {
 
-        for (int j = 0; j < TAM; j++)
+        for (int j = 0; j < TAM_TABLERO; j++)
         {
 
             if (tablero[i][j] == ' ')
@@ -430,9 +425,10 @@ int puedeGanar(char tablero[TAM][TAM], char jugador, int* fila, int* columna)
     return 0;
 }
 
-// Se asignan los simbolos aleatoriamente al jugador y a la IA
+
 void asignarSimbolos(char* jugador, char* ia)
 {
+    // Se asignan los símbolos aleatoriamente al jugador y a la IA
     if (rand() % 2 == 0)
     {
         *jugador = 'X';
@@ -446,65 +442,76 @@ void asignarSimbolos(char* jugador, char* ia)
     return;
 }
 
-// Actualizar se usa mientras se está jugando y al final para mostrar quién ganó (por eso el parámetro turno es opcional, en el final no se usa)
-void actualizarPantalla(char tablero[TAM][TAM], char jugador, char ia, char turno)
+void actualizarPantalla(char tablero[TAM_TABLERO][TAM_TABLERO], char jugador, char ia, char turno)
 {
+     // Actualizar se usa mientras se está jugando y al final para mostrar quién ganó (por eso el parámetro turno es opcional, en el final no se usa)
+    //limpiamos la consola
     system("cls");
-    printf("Jugador: %c | IA: %c\n", jugador, ia);
-
+    //mostramos que caracter le toca al usuario y a la IA
+    printf("\t      Jugador: %c | IA: %c\n", jugador, ia);
+    //Si el turno no es '\0' entonces la partida sigue en curso
     if(turno!='\0' && turno==jugador)
-        printf("\n\nTurno de JUGADOR (%c):", jugador);
+    {
+        printf("\n\n\t    Turno de JUGADOR (%c):", jugador);
+        mostrarTablero(tablero);
+    }//si turno es '\0', significa que el juego ha terminado
     else if(turno!='\0')
     {
-        printf("\n\nTurno de IA (%c):", ia);
+        printf("\n\n\t       Turno de IA (%c):", ia);
+        //mostramos el tablero para visualizar como va la partida
+        mostrarTablero(tablero);
+        //salimos de la funcion
+        Sleep(1000);
     }
     else
-        printf("\n\nFIN DEL JUEGO!");
-
-    mostrarTablero(tablero);
-    Sleep(1000);
-
+    {
+        mostrarTablero(tablero);
+        printf("\n\n\t        FIN DEL JUEGO!!");
+    }
     return;
 }
 
 
-void registrarPartida(tLista* partidas, void* jugador, char tablero[][TAM],int puntajeObtenido)
+void registrarPartida(tLista* partidas, void* jugador, char tablero[][TAM_TABLERO],int puntajeObtenido)
 {
     tPartida partida;
     tJugador* auxJugador=(tJugador*)jugador;
     int i,j;
 
-    for( i=0; i<TAM; i++)
+    for( i=0; i<TAM_TABLERO; i++)
     {
-        for( j=0; j<TAM; j++)
+        for( j=0; j<TAM_TABLERO; j++)
             partida.tablero[i][j]= tablero[i][j];
     }
-
+    ///Cargamos el puntaje de la partida
     partida.puntajeObtenido = puntajeObtenido;
+    ///cargamos el nombre del jugador
     strcpy(partida.jugador,auxJugador->nombre);
+    ///insertamos toda la información
     listaInsertarAlFinal(partidas,&partida,sizeof(partida));
-
 }
 
-void quienGana(tNodo* listaJugadores,tLista* partidas,char tablero[][TAM],char ganador,char jug, void(*accion)(tLista*, void*, char[][TAM],int))
-{
-    tJugador* jugador = (tJugador*)listaJugadores->info;
 
+void quienGana(tNodo* listaJugadores,tLista* partidas,char tablero[][TAM_TABLERO],char ganador,char jug, void(*accion)(tLista*, void*, char[][TAM_TABLERO],int))
+{
+    //guardamos la información del jugador en una variable axiliar para luego decidir quien gano
+    tJugador* jugador = (tJugador*)listaJugadores->info;
+    //Caso donde el jugador salio victorioso, se imprime el msj y sumamos 3 puntos
     if (ganador == jug)
     {
-        printf("\nEl jugador %s gana!!\n", jugador->nombre);
+        printf("\n\n\t    El jugador %s gana!!\n", jugador->nombre);
         jugador->puntaje +=3;
         accion(partidas,jugador,tablero,3);
-    }
+    }//Caso donde el jugador salio NO victorioso, se imprime el msj y restamos 1 punto
     else if(ganador!=' ')
     {
-        printf("\nLa IA gana!!\n");
+        printf("\n\n\t         La IA gana!!\n");
         jugador->puntaje -=1;
         accion(partidas,jugador,tablero,-1);
-    }
+    }//Si no gano, ni perdión, la 3 opción es el empate
     else
     {
-        printf("\nEs un empate!!\n");
+        printf("\n\n\t        Es un empate!!\n");
         jugador->puntaje +=2;
         accion(partidas,jugador,tablero,2);
     }
@@ -514,91 +521,14 @@ int preparadoSiONo(void* jugador )
 {
     tJugador* a = (tJugador*)jugador;
     system("cls");
-    printf("Jugador %s, estas preparado?\nPresiona enter para continuar... ",a->nombre);
+    printf("\nJugador %s, estas preparado?\n\nPresiona enter para continuar... ",a->nombre);
     fflush(stdin);
     getchar();
     return TODO_OK;
 }
 
-void registrarEnInformeMayoresPuntajes(FILE* arch,tLista* listaJugadores,int (*cmp)(const void*, const void*))
-{
-    tLista* aux = listaJugadores;
-    fprintf(arch,"Puntaje/Puntajes mas altos:\n\n");
-    while( *listaJugadores && cmp((*listaJugadores)->info,(*aux)->info))
-    {
-        fprintf(arch,"Jugador: %s ---> Puntos: %d\n",((tJugador*)(*listaJugadores)->info)->nombre,((tJugador*)(*listaJugadores)->info)->puntaje);
-        listaJugadores=&(*listaJugadores)->sig;
-    }
-}
-
-int registrarEnInformeJugadorPartidasPuntaje(FILE* arch,tLista* partidasJugadas,int numeroDePartida)
-{
-    int j;
-    tPartida* auxPartida = (tPartida*) (*partidasJugadas)->info;
-
-    if(numeroDePartida==1)
-        fprintf(arch,"Jugador: %s\n\n", auxPartida ->jugador);
-
-    fprintf(arch,"Partida numero %d: \n\n",numeroDePartida);
-    for(j=0; j<TAM; j++)
-    {
-        fprintf(arch,"\t%c | %c | %c\n",auxPartida ->tablero[j][0],auxPartida ->tablero[j][1],auxPartida ->tablero[j][2]);
-    }
-    fprintf(arch,"\nPuntos Obtenidos: %d \n\n",auxPartida ->puntajeObtenido);
-
-    fflush(arch);
-    return auxPartida->puntajeObtenido;
-}
-
-void registrarEnInformePuntosTotalesXJugador(FILE* arch,int PuntosTotales)
-{
-    fprintf(arch,"TOTAL DE PUNTOS: %d \n----------------------------------\n\n", PuntosTotales);
-    fflush(arch);
-}
-
-int generarInformeDeGrupo(tLista* listaJugadores, tLista* partidasJugadas,int cantidadPartidas,int (*cmp)(const void*, const void*))
-{
-    char nombreArch[TAM_CADENA_ARCH];
-    FILE *arch;
-    int i=1, totalPuntaje=0;
-    time_t t = time(NULL);
-    struct tm tiempoAct = *localtime(&t);
-
-    //Personalizo el nombre del informe de juego de acuerdo a fecha y hora:
-
-    snprintf(nombreArch, sizeof(nombreArch), "informe-juego_%d-%02d-%02d-%02d-%02d.txt",tiempoAct.tm_year + 1900, tiempoAct.tm_mon + 1, tiempoAct.tm_mday, tiempoAct.tm_hour, tiempoAct.tm_min);
-
-    arch = fopen(nombreArch, "wt");
-    if (!arch)
-        return ERROR;
-
-
-    while(*partidasJugadas)
-    {
-
-        while(i<=cantidadPartidas && *partidasJugadas)
-        {
-
-            totalPuntaje += registrarEnInformeJugadorPartidasPuntaje(arch,partidasJugadas,i);
-            partidasJugadas=&(*partidasJugadas)->sig;
-            i++;
-        }
-        registrarEnInformePuntosTotalesXJugador(arch,totalPuntaje);
-        totalPuntaje=0;
-        i=1;
-
-    }
-    registrarEnInformeMayoresPuntajes(arch,listaJugadores,cmp);
-
-    fclose(arch);
-
-    return TODO_OK;
-}
-
-//
 void cargarDificultad(int* num)
 {
-
     printf("Ingrese dificultad ('0' facil - '1' dificil) = ");
     scanf("%d", num);
 
@@ -607,13 +537,11 @@ void cargarDificultad(int* num)
         printf("Incorrecto. Ingrese '0' o '1': ");
         scanf("%d", num);
     }
-
     return;
 }
 
-// Modifiqué jugar para que haga lo mismo con dos ifs menos que eran muy parecidos. Agregué los char jugador y ia para no usar 'x' o 'y' directamente. Aparte, estos char son necesarios
-// para que ande bien la funcion de la IA.
-int Jugar(char tablero[][TAM], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion)
+
+void Jugar(char tablero[][TAM_TABLERO], tLista* listaJugadores, int dif, tLista* ListaPartidas, tConfiguracion* configuracion)
 {
     char ganador = ' ';
     char turno;
@@ -621,7 +549,7 @@ int Jugar(char tablero[][TAM], tLista* listaJugadores, int dif, tLista* ListaPar
     int movimientos = 0, cantPartidasJugadas = 0;
     tNodo* jugadores = *listaJugadores;
 
-    asignarSimbolos(&jugador, &ia);
+
 
 
     while(jugadores)
@@ -631,8 +559,9 @@ int Jugar(char tablero[][TAM], tLista* listaJugadores, int dif, tLista* ListaPar
         while(cantPartidasJugadas<configuracion->CantPartidas)
         {
             turno = 'X';
+            asignarSimbolos(&jugador, &ia);
 
-            while(ganador == ' ' && movimientos < TAM*TAM)
+            while(ganador == ' ' && movimientos < TAM_TABLERO*TAM_TABLERO)
             {
 
                 if(turno == jugador)
@@ -657,14 +586,18 @@ int Jugar(char tablero[][TAM], tLista* listaJugadores, int dif, tLista* ListaPar
             actualizarPantalla(tablero,jugador,ia,'\0');
             quienGana(jugadores,ListaPartidas,tablero,ganador,jugador,registrarPartida);
 
-            printf("\nPresione enter para comenzar el siguiente juego...");
-            fflush(stdin);
-            getchar();
-
             ganador=' ';
             movimientos=0;
             cantPartidasJugadas++;
             inicializarTablero(tablero);
+
+            if(cantPartidasJugadas!=configuracion->CantPartidas)
+                printf("\nPresione enter para comenzar el siguiente juego...");
+            else
+                printf("\nPresione enter para continuar...");
+            fflush(stdin);
+            getchar();
+
 
         }
 
@@ -672,5 +605,4 @@ int Jugar(char tablero[][TAM], tLista* listaJugadores, int dif, tLista* ListaPar
         cantPartidasJugadas=0;
     }
 
-    return 0;
 }

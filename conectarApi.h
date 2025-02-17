@@ -29,12 +29,11 @@ typedef struct {
 
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
-CURLcode peticionGET(tRespuesta *respuesta, char *path);
-CURLcode peticionPOST(tRespuesta *respuesta,tLista* listaJugadores,char* pathUrl, char* jsonData);
-int parsearJugadores(tRespuesta *res, tJugadorAPI *jugador);
+CURLcode peticionGET(tRespuesta *respuesta,const char *path);
+CURLcode peticionPOST(tRespuesta *respuesta,const char* pathUrl,const char* jsonData);
 
-int compararJugAPI(const void *a, const void *b);
-void actualizarJugador(void *a, void *b);
-void mostrarJugadorAPI(const void *a, const void *b);
+
+
+
 
 #endif // CONECTARAPI_H_INCLUDED

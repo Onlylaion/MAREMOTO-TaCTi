@@ -44,9 +44,17 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="conectarApi.h" />
+		<Unit filename="informe.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="informe.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="utilidades.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utilidades.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
