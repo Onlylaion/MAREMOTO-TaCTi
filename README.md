@@ -71,10 +71,13 @@ Al iniciar el juego, aparecerá un menú con 3 opciones, que se seleccionan con 
    - Cómo quedó el tablero en cada partida.  
    - Los puntos obtenidos.  
    - El total por jugador.  
-   - El puntaje más alto.  
-8. Los resultados se enviarán automáticamente a la **API**.  
+   - El/los puntaje/puntajes más alto/s.  
+8. Los resultados se enviarán a la **API**.  
 
 ### **[B] Ver ranking del equipo**  
-Muestra el **top de puntajes** del equipo.  
+Muestra el **top de puntajes** del equipo, según la información que hay en la API.
+
+### **[C] Salir**  
+Finaliza la ejecución del juego.
 
 ---
