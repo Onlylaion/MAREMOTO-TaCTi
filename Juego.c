@@ -134,7 +134,7 @@ char obtenerOpcionDeMenu()
     {
         ReadConsoleInput(hIn, &ir, 1, &eventos);
         // Si se detecta un evento de mouse y se presiona el botón izquierdo
-        if (ir.EventType == MOUSE_EVENT && ir.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+        if (ir.EventType == MOUSE_EVENT && ir.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED && ir.Event.MouseEvent.dwEventFlags != MOUSE_MOVED)
         {
             x = ir.Event.MouseEvent.dwMousePosition.X;
             y = ir.Event.MouseEvent.dwMousePosition.Y;
