@@ -2,43 +2,19 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
+	<File name="utilidades.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="TDALista.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="869" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="conectarApi.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="FuncionesTDA-Lista.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4155" topLine="105" />
-		</Cursor>
-	</File>
-	<File name="Juego.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="154" topLine="3" />
-		</Cursor>
-		<Folding>
-			<Collapse line="12" />
-			<Collapse line="62" />
-			<Collapse line="86" />
-			<Collapse line="122" />
-			<Collapse line="239" />
-			<Collapse line="264" />
-			<Collapse line="273" />
-			<Collapse line="286" />
-			<Collapse line="315" />
-			<Collapse line="333" />
-			<Collapse line="375" />
-			<Collapse line="406" />
-			<Collapse line="422" />
-			<Collapse line="500" />
-			<Collapse line="511" />
-			<Collapse line="529" />
-			<Collapse line="535" />
-		</Folding>
-	</File>
-	<File name="conectarApi.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="127" topLine="0" />
+			<Cursor1 position="1691" topLine="168" />
 		</Cursor>
 	</File>
 	<File name="utilidades.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -48,12 +24,30 @@
 		<Folding>
 			<Collapse line="5" />
 			<Collapse line="10" />
-			<Collapse line="17" />
-			<Collapse line="22" />
-			<Collapse line="27" />
-			<Collapse line="33" />
-			<Collapse line="41" />
-			<Collapse line="47" />
+			<Collapse line="15" />
+			<Collapse line="20" />
+			<Collapse line="26" />
+			<Collapse line="35" />
+			<Collapse line="46" />
+		</Folding>
+	</File>
+	<File name="Juego.c" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3634" topLine="72" />
+		</Cursor>
+		<Folding>
+			<Collapse line="231" />
+			<Collapse line="260" />
+			<Collapse line="273" />
+			<Collapse line="284" />
+			<Collapse line="310" />
+			<Collapse line="313" />
+			<Collapse line="374" />
+			<Collapse line="401" />
+			<Collapse line="404" />
+			<Collapse line="495" />
+			<Collapse line="500" />
+			<Collapse line="535" />
 		</Folding>
 	</File>
 	<File name="main.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
@@ -61,24 +55,19 @@
 			<Cursor1 position="213" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="utilidades.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="conectarApi.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="0" topLine="0" />
+			<Cursor1 position="127" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="conectarApi.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3504" topLine="64" />
 		</Cursor>
 	</File>
 	<File name="Juego.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="284" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="funciones.h" open="1" top="1" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="98" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="FuncionesTDA-Lista.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1691" topLine="68" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
