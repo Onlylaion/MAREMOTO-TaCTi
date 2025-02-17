@@ -14,4 +14,5 @@ int compararFechaHora(const char *fyh1, const char *fyh2);
 int parsearJugadores(tRespuesta *res, tJugadorAPI *jugador);
 void imprimirEncabezadoRanking();
 void mostrarEnOrdenJugadores(tLista* jugadores,void (*accion)(const void*,const void*));
+int cadenaVacia(const char*p);
 #endif // UTILIDADES_H_INCLUDED

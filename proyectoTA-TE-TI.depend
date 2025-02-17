@@ -188,31 +188,31 @@
 	"TDALista.h"
 	"conectarApi.h"
 
-1739754980 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\conectarapi.c
+1739760882 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\conectarapi.c
 	"conectarApi.h"
 
-1739754214 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\conectarapi.h
+1739757174 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\conectarapi.h
 	<stdio.h>
 	<curl/curl.h>
 	<string.h>
 	"TDALista.h"
 	"Juego.h"
 
-1739753764 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\tdalista.h
+1739759584 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\tdalista.h
 
-1739755886 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\juego.h
+1739759930 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\juego.h
 	"TDALista.h"
 	"conectarApi.h"
 	<stdio.h>
 
-1739753731 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\funcionestda-lista.c
+1739759584 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\funcionestda-lista.c
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
 	<time.h>
 	"TDALista.h"
 
-1739756087 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\juego.c
+1739760882 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\juego.c
 	<stdio.h>
 	<stdlib.h>
 	<windows.h>
@@ -222,7 +222,7 @@
 	"utilidades.h"
 	"informe.h"
 
-1739755318 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\utilidades.h
+1739758382 c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\utilidades.h
 	"Juego.h"
 
 1739755914 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\main.c
@@ -230,7 +230,7 @@
 	"TDALista.h"
 	"conectarApi.h"
 
-1739755318 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\utilidades.c
+1739758398 source:c:\users\pc\desktop\nueva carpeta\maremotoordenado\maremoto-tacti\utilidades.c
 	"utilidades.h"
 	"Juego.h"
 	<string.h>

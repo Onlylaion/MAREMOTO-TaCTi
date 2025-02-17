@@ -10,6 +10,7 @@
 
 
 
+
 void ingresarJugadores(tLista* pl)
 {
     tJugador jugador;
@@ -27,12 +28,15 @@ void ingresarJugadores(tLista* pl)
 
     while (strcmpi(jugador.nombre, "fin") != 0)
     {
-        if (!listaInsertarEnPosAleatoria(pl, cantidad, &jugador, sizeof(jugador), cmpNombres))
-            printf("Error: Nombre duplicado. Intente nuevamente.\n");
-        else
+        if(!cadenaVacia(jugador.nombre))
         {
-            cantidad++;
-            jugador.puntaje = 0;
+            if (!listaInsertarEnPosAleatoria(pl, cantidad, &jugador, sizeof(jugador), cmpNombres))
+            printf("Error: Nombre duplicado. Intente nuevamente.\n");
+            else
+            {
+                cantidad++;
+                jugador.puntaje = 0;
+            }
         }
         // Volver a leer el siguiente nombre con fgets para permitir espacios
         fflush(stdin);
@@ -158,14 +162,20 @@ char obtenerOpcionDeMenu()
 
 }
 
+void recorrerListaJugadores(tLista* listaJugadores, tConfiguracion* configuracion, void(*accion)(const void*, const void*))
+{
+    while(*listaJugadores)
+    {
+        accion((*listaJugadores)->info,configuracion);
+        listaJugadores=&(*listaJugadores)->sig;
+    }
+}
 
 void menu(tLista* listaJugadores,tLista* listaPartidas,tLista* listaRanking,tConfiguracion* configuracion, char tablero[][TAM_TABLERO])
 {
     // en el menú ahora están las funciones 'ordenar lista' y 'generar informe'
     char opcion;
     int dif;
-    char jsonData[TAM_MAX_JSON];
-    tRespuesta respuesta;
 
     do
     {
@@ -210,8 +220,8 @@ void menu(tLista* listaJugadores,tLista* listaPartidas,tLista* listaRanking,tCon
                     fflush(stdin);
                     getchar();
                     system("cls");
-                    prepararDatoJSON(listaJugadores,configuracion,jsonData,sizeof(jsonData));
-                    peticionPOST(&respuesta,configuracion->urlApi,jsonData);
+                    printf("\nEnviando datos a la Api...");
+                    recorrerListaJugadores(listaJugadores,configuracion,enviarDatosJSON);
                     listaVaciar(listaJugadores);
                     listaVaciar(listaPartidas);
 
@@ -518,16 +528,22 @@ int preparadoSiONo(void* jugador )
     return TODO_OK;
 }
 
-void cargarDificultad(int* num)
-{
-    printf("Ingrese dificultad ('0' facil - '1' dificil) = ");
-    scanf("%d", num);
+void cargarDificultad(int *num) {
 
-    while(*num!=0 && *num!=1)
-    {
-        printf("Incorrecto. Ingrese '0' o '1': ");
-        scanf("%d", num);
-    }
+    int resultado;
+
+    do {
+
+        printf("Ingrese dificultad ('0' facil - '1' dificil): ");
+        resultado = scanf("%d", num);
+
+        if (resultado != 1) {
+            printf("Entrada invalida. Ingrese '0' o '1'.\n");
+            while(getchar() != '\n');
+        }
+
+    } while(resultado != 1 || (*num != 0 && *num != 1));
+
     return;
 }
 

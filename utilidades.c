@@ -158,3 +158,8 @@ void mostrarEnOrdenJugadores(tLista* jugadores,void (*accion)(const void*,const 
     fflush(stdin);
     getchar();
 }
+
+int cadenaVacia(const char*p)
+{
+   return(p ==NULL || *p == '\0');
+}

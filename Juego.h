@@ -37,8 +37,7 @@ typedef struct
 }tPartida;
 
 
-
-void prepararDatoJSON(tLista* listaJugadores, tConfiguracion* configuracion, char* json_data,unsigned tamJSON);
+void recorrerListaJugadores(tLista* listaJugadores, tConfiguracion* configuracion, void(*accion)(const void*, const void*));
 void inicializarTablero(char tablero[][TAM_TABLERO]);
 void mostrarTablero(char tablero[][TAM_TABLERO]);
 char verificarGanador(char tablero[][TAM_TABLERO]);

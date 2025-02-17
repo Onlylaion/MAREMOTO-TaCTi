@@ -1,27 +1,17 @@
 #include "conectarApi.h"
 
 
-void prepararDatoJSON(tLista* listaJugadores, tConfiguracion* configuracion, char* jsonData,unsigned tamJSON)
+void enviarDatosJSON(const void* elem1,const void* elem2)
 {
-    char cadena[TAM_CADENA];
-    int pos = 0;
-
+    tJugador* jugador=(tJugador*) elem1;
+    tConfiguracion* configuracion= (tConfiguracion*)elem2;
+    char jsonData[TAM_MAX_JSON];
+    tRespuesta respuesta;
     // Iniciar el JSON
-    pos += snprintf(jsonData + pos, tamJSON, "{ \"CodigoGrupo\": \"%s\", \"Jugadores\": [", configuracion->codIdenGrupo);
-
-    // Recorrer la lista de jugadores y agregarlos al JSON cadena
-    while(*listaJugadores)
-    {
-        snprintf(cadena, sizeof(cadena), "{\"nombre\": \"%s\", \"puntos\": %d}",
-                 ((tJugador*)(*listaJugadores)->info)->nombre,
-                 ((tJugador*)(*listaJugadores)->info)->puntaje);
-
-        // Agregar coma entre elementos, excepto
-        listaJugadores=&(*listaJugadores)->sig;
-        pos += snprintf(jsonData + pos, tamJSON - pos, "%s%s", cadena, (*listaJugadores) ? ", " : "" );
-    }
-    // Cerrar el JSON
-    snprintf(jsonData + pos, tamJSON - pos, "]}");
+    snprintf(jsonData, sizeof(jsonData), "{ \"CodigoGrupo\": \"%s\", \"Jugadores\": [{\"nombre\": \"%s\", \"puntos\": %d}]}", configuracion->codIdenGrupo,
+             jugador->nombre,
+             jugador->puntaje);
+    peticionPOST(&respuesta,configuracion->urlApi,jsonData);
 }
 
 
@@ -32,7 +22,8 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
     tRespuesta *res = (tRespuesta*) userp;
     char *info = malloc(realsize + 1);
 
-    if(!info){
+    if(!info)
+    {
         printf("No hay memoria suficiente");
         return 0;
     }
@@ -44,7 +35,8 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
     return realsize;
 }
 
-CURLcode peticionGET(tRespuesta *respuesta,const char *path){
+CURLcode peticionGET(tRespuesta *respuesta,const char *path)
+{
     CURLcode res;
     CURL* curl;
     // Inicializar el manejo de curl
@@ -69,7 +61,8 @@ CURLcode peticionGET(tRespuesta *respuesta,const char *path){
     return res;
 }
 
-CURLcode peticionPOST(tRespuesta *respuesta,const char* pathUrl,const char* jsonData){
+CURLcode peticionPOST(tRespuesta *respuesta,const char* pathUrl,const char* jsonData)
+{
     CURLcode res;
     CURL* curl;
     struct curl_slist *headers = NULL;
