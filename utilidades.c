@@ -24,7 +24,8 @@ void mostrarJugador(const void* a,const void* b)
     printf("%d-%s\n",*posicion,jugador->nombre);
 }
 
-void actualizarJugador(void *a, void *b){
+void actualizarJugador(void *a, void *b)
+{
     tJugadorAPI *aa = (tJugadorAPI *) a;
     tJugadorAPI *bb = (tJugadorAPI *) b;
 
@@ -32,73 +33,78 @@ void actualizarJugador(void *a, void *b){
     strcpy(aa->fyh, bb->fyh);
 }
 
-
-int compararJugAPI(const void *a, const void *b){
+int compararJugAPI(const void *a, const void *b)
+{
     tJugadorAPI *aa = (tJugadorAPI *) a;
     tJugadorAPI *bb = (tJugadorAPI *) b;
-    tFechaHora fecha1, fecha2;
     //Esta función se encarga de ordenar jugadores según:
     //Nombre (orden alfabético).
     //Puntaje (mayor puntaje primero).
     //Fecha y hora de la última partida (más reciente primero en caso de empate).
-
     int resultado = strcmp(aa->nombre, bb->nombre);
-    if( resultado != 0){
+    if( resultado != 0)
+    {
         resultado = aa->puntaje - bb->puntaje;
-        if ( resultado == 0){
-
-            sscanf(aa->fyh, "%2d/%2d/%4d %2d:%2d:%2d",
-                   &fecha1.dia,
-                   &fecha1.mes,
-                   &fecha1.anio,
-                   &fecha1.hora,
-                   &fecha1.minutos,
-                   &fecha1.segundos);
-
-
-            sscanf(bb->fyh, "%2d/%2d/%4d %2d:%2d:%2d",
-                   &fecha2.dia,
-                   &fecha2.mes,
-                   &fecha2.anio,
-                   &fecha2.hora,
-                   &fecha2.minutos,
-                   &fecha2.segundos);
-
-            resultado = fecha1.anio - fecha2.anio;
-            if(resultado == 0){
-                resultado = fecha1.mes - fecha2.mes;
-                if(resultado == 0){
-                    resultado = fecha1.dia - fecha2.dia;
-                    if(resultado == 0){
-                        resultado = fecha1.hora - fecha2.hora;
-
-                        if(resultado == 0){
-                            resultado = fecha1.minutos - fecha2.minutos;
-
-                            if(resultado == 0){
-                                resultado = fecha1.segundos - fecha2.segundos;
-                            } else {
-                                return 1;
-                            }
-                        }
-                    }
-                }
-            }
-
+        if ( resultado == 0)
+        {
+            resultado = compararFechaHora(aa->fyh, bb->fyh);
         }
     }
 
     return resultado;
-
 }
 
-void imprimirEncabezadoRanking(){
+int compararFechaHora(const char *fyh1, const char *fyh2)
+{
+
+    int resultado;
+    tFechaHora fecha1, fecha2;
+
+    sscanf(fyh1, "%2d/%2d/%4d %2d:%2d:%2d",
+           &fecha1.dia, &fecha1.mes, &fecha1.anio,
+           &fecha1.hora, &fecha1.minutos, &fecha1.segundos);
+
+    sscanf(fyh2, "%2d/%2d/%4d %2d:%2d:%2d",
+           &fecha2.dia, &fecha2.mes, &fecha2.anio,
+           &fecha2.hora, &fecha2.minutos, &fecha2.segundos);
+
+    resultado = fecha1.anio - fecha2.anio;
+    if(resultado == 0)
+    {
+        resultado = fecha1.mes - fecha2.mes;
+        if(resultado == 0)
+        {
+            resultado = fecha1.dia - fecha2.dia;
+            if(resultado == 0)
+            {
+                resultado = fecha1.hora - fecha2.hora;
+
+                if(resultado == 0)
+                {
+                    resultado = fecha1.minutos - fecha2.minutos;
+
+                    if(resultado == 0)
+                    {
+                        resultado = fecha1.segundos - fecha2.segundos;
+                    }
+                }
+            }
+        }
+    }
+
+    return resultado;
+}
+
+
+void imprimirEncabezadoRanking()
+{
 
     printf("| Pos | Nombre          | Puntaje Total | Ultima Partida       |\n");
 
 }
 
-void mostrarJugadorAPI(const void *a, const void *b){
+void mostrarJugadorAPI(const void *a, const void *b)
+{
 
     tJugadorAPI *aa = (tJugadorAPI *) a;
 
@@ -110,10 +116,12 @@ void mostrarJugadorAPI(const void *a, const void *b){
 
 }
 
-int parsearJugadores(tRespuesta *res, tJugadorAPI *jugador){
+int parsearJugadores(tRespuesta *res, tJugadorAPI *jugador)
+{
     char *p = strrchr(res->info, '}');
 
-    if(!p){
+    if(!p)
+    {
         return 0;
     }
 
